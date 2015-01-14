@@ -1157,7 +1157,9 @@ BASKET_APPS_NEWSLETTER = 'app-dev'
 KUMASCRIPT_URL_TEMPLATE = 'http://developer.mozilla.org:9080/docs/{path}'
 
 ES_DISABLED = True
+ES_INDEX_PREFIX = 'mdn'
 ES_LIVE_INDEX = False
+ES_URLS = ['http://localhost:9200']
 
 LOG_LEVEL = logging.WARN
 SYSLOG_TAG = 'http_app_kuma'

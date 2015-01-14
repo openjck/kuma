@@ -7,7 +7,7 @@ from elasticutils.contrib.django import F
 from rest_framework.filters import BaseFilterBackend
 from waffle import flag_is_active
 
-from .models import DocumentType, Filter, FilterGroup
+from .models import WikiDocumentType, Filter, FilterGroup
 
 
 def get_filters(getter_func):
@@ -146,7 +146,7 @@ class HighlightFilterBackend(BaseFilterBackend):
     A django-rest-framework filter backend that applies highlighting
     based on the excerpt fields of the Document search index.
     """
-    highlight_fields = DocumentType.excerpt_fields
+    highlight_fields = WikiDocumentType.excerpt_fields
 
     def filter_queryset(self, request, queryset, view):
         return queryset.highlight(*self.highlight_fields)

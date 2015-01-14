@@ -11,7 +11,7 @@ from waffle import flag_is_active
 from .filters import (AdvancedSearchQueryBackend, DatabaseFilterBackend,
                       get_filters, HighlightFilterBackend,
                       LanguageFilterBackend, SearchQueryBackend)
-from .models import DocumentType, Filter
+from .models import Filter, WikiDocumentType
 from .queries import DocumentS
 from .renderers import ExtendedTemplateHTMLRenderer
 from .serializers import (DocumentSerializer, FilterWithGroupSerializer,
@@ -52,7 +52,7 @@ class SearchView(ListAPIView):
         self.selected_filters = get_filters(self.request.QUERY_PARAMS.getlist)
 
     def get_queryset(self):
-        return DocumentS(DocumentType,
+        return DocumentS(WikiDocumentType,
                          url=self.request.get_full_path(),
                          current_page=self.current_page,
                          serialized_filters=self.serialized_filters,

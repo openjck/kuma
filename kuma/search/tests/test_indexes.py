@@ -7,7 +7,7 @@ from elasticsearch.exceptions import RequestError
 from kuma.wiki.models import Document
 
 from . import ElasticTestCase
-from ..models import Index, DocumentType
+from ..models import Index, WikiDocumentType
 from ..index import get_indexing_es, get_indexes
 
 
@@ -77,7 +77,7 @@ class TestIndexes(ElasticTestCase):
         indexes_dict = dict(get_indexes())
         # many due to translations
         eq_(indexes_dict[successor_index.prefixed_name], 14)
-        S = DocumentType.search
+        S = WikiDocumentType.search
         eq_(S().all().count(), 7)
         eq_(S().query(content__match='an article title')[0].slug,
             'article-title')

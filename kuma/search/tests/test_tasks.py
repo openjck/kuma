@@ -3,13 +3,13 @@ from nose.tools import eq_
 from kuma.wiki.tests import revision
 
 from . import ElasticTestCase
-from ..models import DocumentType
+from ..models import WikiDocumentType
 
 
 class TestLiveIndexing(ElasticTestCase):
 
     def test_live_indexing_docs(self):
-        S = DocumentType.search
+        S = WikiDocumentType.search
         count_before = S().count()
 
         r = revision(save=True)

@@ -1,24 +1,23 @@
 # -*- coding: utf-8 -*-
 import operator
+
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models.signals import post_delete
-from django.utils.html import strip_tags
+from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.template.defaultfilters import slugify
+from django.utils.html import strip_tags
 
-from elasticutils.contrib.django import MappingType, Indexable
+from elasticsearch_dsl import document, field
 from elasticutils.contrib.django.tasks import index_objects
 
 from kuma.core.managers import PrefetchTaggableManager
 from kuma.core.urlresolvers import reverse
 from kuma.wiki.models import Document
 
-from .decorators import register_mapping_type
-from .queries import DocumentS
 from .signals import delete_index
 
 
@@ -144,11 +143,13 @@ class FilterGroup(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class FilterManager(models.Manager):
     use_for_related_fields = True
 
     def visible_only(self):
         return self.filter(visible=True)
+
 
 class Filter(models.Model):
     """
@@ -209,141 +210,37 @@ class Filter(models.Model):
                                self.group.slug, self.slug)
 
 
-@register_mapping_type
-class DocumentType(MappingType, Indexable):
+class WikiDocumentType(document.DocType):
     excerpt_fields = ['summary', 'content']
     exclude_slugs = ['Talk:', 'User:', 'User_talk:', 'Template_talk:',
                      'Project_talk:']
 
-    @classmethod
-    def get_model(cls):
-        return Document
+    boost = field.Float(null_value=1.0)
+    content = field.String(analyzer='kuma_content',
+                           term_vector='with_positions_offsets')
+    css_classnames = field.String(analyzer='case_insensitive_keyword')
+    html_attributes = field.String(analyzer='case_insensitive_keyword')
+    id = field.Long()
+    kumascript_macros = field.String(analyzer='case_insensitive_keyword')
+    locale = field.String(index='not_analyzed')
+    modified = field.Date()
+    parent = field.Nested(properties={
+        'id': field.Long(),
+        'title': field.String(analyzer='kuma_title'),
+        'slug': field.String(index='not_analyzed'),
+        'locale': field.String(index='not_analyzed'),
+    })
+    slug = field.String(index='not_analyzed')
+    summary = field.String(analyzer='kuma_content',
+                           term_vector='with_positions_offsets')
+    tags = field.String(analyzer='case_sensitive')
+    title = field.String(analyzer='kuma_title', boost=1.2)
+
+    class Meta(object):
+        doc_type = 'wiki_document'
 
     @classmethod
-    def get_index(cls):
-        return Index.objects.get_current().prefixed_name
-
-    @classmethod
-    def search(cls):
-        """Returns a typed S for this class.
-
-        :returns: an `S` for this DjangoMappingType
-
-        """
-        return DocumentS(cls)
-
-    @classmethod
-    def get_analysis(cls):
-        return {
-            'filter': {
-                'kuma_word_delimiter': {
-                    'type': 'word_delimiter',
-                    'preserve_original': True,  # hi-fi -> hifi, hi-fi
-                    'catenate_words': True,  # hi-fi -> hifi
-                    'catenate_numbers': True,  # 90-210 -> 90210
-                }
-            },
-            'analyzer': {
-                'default': {
-                    'tokenizer': 'standard',
-                    'filter': ['standard', 'elision']
-                },
-                # a custom analyzer that strips html and uses our own
-                # word delimiter filter and the elision filter#
-                # (e.g. L'attribut -> attribut). The rest is the same as
-                # the snowball analyzer
-                'kuma_content': {
-                    'type': 'custom',
-                    'tokenizer': 'standard',
-                    'char_filter': ['html_strip'],
-                    'filter': [
-                        'elision',
-                        'kuma_word_delimiter',
-                        'lowercase',
-                        'standard',
-                        'stop',
-                        'snowball',
-                    ],
-                },
-                'kuma_title': {
-                    'type': 'custom',
-                    'tokenizer': 'standard',
-                    'filter': [
-                        'elision',
-                        'kuma_word_delimiter',
-                        'lowercase',
-                        'standard',
-                        'snowball',
-                    ],
-                },
-                'case_sensitive': {
-                    'type': 'custom',
-                    'tokenizer': 'keyword'
-                },
-                'caseInsensitiveKeyword': {
-                    'type': 'custom',
-                    'tokenizer': 'keyword',
-                    'filter': 'lowercase'
-                }
-            },
-        }
-
-    @classmethod
-    def get_mapping(cls):
-        return {
-            # try to not waste so much space
-            '_all': {'enabled': False},
-            '_boost': {'name': '_boost', 'null_value': 1.0, 'type': 'float'},
-            'content': {
-                'type': 'string',
-                'analyzer': 'kuma_content',
-                # faster highlighting
-                'term_vector': 'with_positions_offsets',
-            },
-            'id': {'type': 'long', 'index': 'not_analyzed'},
-            'locale': {'type': 'string', 'index': 'not_analyzed'},
-            'modified': {'type': 'date'},
-            'slug': {'type': 'string', 'index': 'not_analyzed'},
-            'parent': {
-                'type': 'nested',
-                'properties': {
-                    'id': {'type': 'long', 'index': 'not_analyzed'},
-                    'title': {'type': 'string', 'analyzer': 'kuma_title'},
-                    'slug': {'type': 'string', 'index': 'not_analyzed'},
-                    'locale': {'type': 'string', 'index': 'not_analyzed'},
-                }
-            },
-            'summary': {
-                'type': 'string',
-                'analyzer': 'kuma_content',
-                # faster highlighting
-                'term_vector': 'with_positions_offsets',
-            },
-            'tags': {'type': 'string', 'analyzer': 'case_sensitive'},
-            'title': {
-                'type': 'string',
-                'analyzer': 'kuma_title',
-                'boost': 1.2,  # the title usually has the best description
-            },
-            'kumascript_macros': {
-                'type': 'string',
-                'analyzer': 'caseInsensitiveKeyword'
-            },
-            'css_classnames': {
-                'type': 'string',
-                'analyzer': 'caseInsensitiveKeyword'
-            },
-            'html_attributes': {
-                'type': 'string',
-                'analyzer': 'caseInsensitiveKeyword'
-            },
-        }
-
-    @classmethod
-    def extract_document(cls, obj_id, obj=None):
-        if obj is None:
-            obj = cls.get_model().objects.get(pk=obj_id)
-
+    def from_django(cls, obj):
         doc = {
             'id': obj.id,
             'title': obj.title,
@@ -376,6 +273,95 @@ class DocumentType(MappingType, Indexable):
             doc['parent'] = {}
 
         return doc
+
+    @classmethod
+    def get_mapping(cls):
+        mapping = cls._doc_type.mapping.to_dict()
+        # TODO: Temporary until elasticsearch-dsl-py supports this.
+        mapping['wiki_document']['_all'] = {'enabled': False}
+
+        return mapping
+
+    @classmethod
+    def get_settings(cls):
+        settings = {
+            'mappings': cls.get_mapping(),
+            'settings': {
+                'index': {
+                    'analysis': cls.get_analysis()
+                }
+            }
+        }
+
+        return settings
+
+    ###
+    ### Old elasticutils methods below.
+    ###
+
+    @classmethod
+    def get_model(cls):
+        return Document
+
+    @classmethod
+    def get_index(cls):
+        return Index.objects.get_current().prefixed_name
+
+    @classmethod
+    def get_analysis(cls):
+        return {
+            'filter': {
+                'kuma_word_delimiter': {
+                    'type': 'word_delimiter',
+                    'preserve_original': True,  # hi-fi -> hifi, hi-fi
+                    'catenate_words': True,  # hi-fi -> hifi
+                    'catenate_numbers': True,  # 90-210 -> 90210
+                }
+            },
+            'analyzer': {
+                'default': {
+                    'tokenizer': 'standard',
+                    'filter': ['standard', 'elision']
+                },
+                # a custom analyzer that strips html and uses our own
+                # word delimiter filter and the elision filter
+                # (e.g. L'attribut -> attribut). The rest is the same as
+                # the snowball analyzer
+                'kuma_content': {
+                    'type': 'custom',
+                    'tokenizer': 'standard',
+                    'char_filter': ['html_strip'],
+                    'filter': [
+                        'elision',
+                        'kuma_word_delimiter',
+                        'lowercase',
+                        'standard',
+                        'stop',
+                        'snowball',
+                    ],
+                },
+                'kuma_title': {
+                    'type': 'custom',
+                    'tokenizer': 'standard',
+                    'filter': [
+                        'elision',
+                        'kuma_word_delimiter',
+                        'lowercase',
+                        'standard',
+                        'snowball',
+                    ],
+                },
+                'case_sensitive': {
+                    'type': 'custom',
+                    'tokenizer': 'keyword'
+                },
+                'case_insensitive_keyword': {
+                    'type': 'custom',
+                    'tokenizer': 'keyword',
+                    'filter': 'lowercase'
+                }
+            },
+        }
 
     @classmethod
     def get_indexable(cls):

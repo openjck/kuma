@@ -1468,8 +1468,8 @@ Full traceback:
         return EditDocumentEvent.is_notifying(user, self)
 
     def get_mapping_type(self):
-        from kuma.search.models import DocumentType
-        return DocumentType
+        from kuma.search.models import WikiDocumentType
+        return WikiDocumentType
 
     def get_contributors(self):
         top_creator_ids = (self.revisions.values_list('creator', flat=True)
