@@ -401,7 +401,7 @@ class WikiDocumentType(document.DocType):
                          for exclude in cls.exclude_slugs]))
 
     def get_excerpt(self):
-        for field in self.excerpt_fields:
-            if field in self.es_meta.highlight:
-                return u'…'.join(self.es_meta.highlight[field])
+        for excerpt_field in self.excerpt_fields:
+            if excerpt_field in self.es_meta.highlight:
+                return u'…'.join(self.es_meta.highlight[excerpt_field])
         return self.summary
