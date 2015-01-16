@@ -2,13 +2,13 @@ from nose.tools import eq_, ok_
 
 from django.conf import settings
 
+from elasticsearch_dsl.connections import connections
 from elasticsearch.exceptions import RequestError
 
 from kuma.wiki.models import Document
 
 from . import ElasticTestCase
 from ..models import Index, WikiDocumentType
-from ..index import get_indexing_es, get_indexes
 
 
 class TestIndexes(ElasticTestCase):
@@ -66,21 +66,18 @@ class TestIndexes(ElasticTestCase):
         successor_index.populate()
         successor_index = Index.objects.get(pk=successor_index.pk)
 
+        S = WikiDocumentType.search
+
         # check if the newly created index is empty
-        indexes_dict = dict(get_indexes())
-        eq_(indexes_dict[successor_index.prefixed_name], 0)
+        eq_(S(index=successor_index.prefixed_name).count(), 0)
 
         successor_index.promote()
         eq_(successor_index.outdated_objects.count(), 0)
 
         self.refresh()  # refresh to make sure the index has the results ready
-        indexes_dict = dict(get_indexes())
-        # many due to translations
-        eq_(indexes_dict[successor_index.prefixed_name], 14)
-        S = WikiDocumentType.search
-        eq_(S().all().count(), 7)
-        eq_(S().query(content__match='an article title')[0].slug,
-            'article-title')
+        eq_(S().count(), 7)
+        eq_(S().query('match', title='lorem ipsum').execute()[0].slug,
+            'lorem-ipsum')
 
     def test_delete_index(self):
         # first create and populate the index
@@ -88,7 +85,7 @@ class TestIndexes(ElasticTestCase):
         index.populate()
 
         # then create it again and see if it blows up
-        es = get_indexing_es()
+        es = connections.get_connection()
 
         self.assertRaises(RequestError, es.indices.create, index.prefixed_name)
 

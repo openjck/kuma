@@ -11,14 +11,24 @@ from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.html import strip_tags
 
+from elasticsearch.helpers import bulk
 from elasticsearch_dsl import document, field
+from elasticsearch_dsl.connections import connections
+from elasticsearch_dsl.search import Search
 from elasticutils.contrib.django.tasks import index_objects
 
 from kuma.core.managers import PrefetchTaggableManager
 from kuma.core.urlresolvers import reverse
-from kuma.wiki.models import Document
 
 from .signals import delete_index
+
+
+# Configure Elasticsearch connections for connection pooling.
+connections.configure(
+    default={'hosts': settings.ES_URLS},
+    indexing={'hosts': settings.ES_URLS,
+              'timeout': settings.ES_INDEXING_TIMEOUT},
+)
 
 
 class IndexManager(models.Manager):
@@ -240,6 +250,14 @@ class WikiDocumentType(document.DocType):
         doc_type = 'wiki_document'
 
     @classmethod
+    def get_connection(cls, alias='default'):
+        return connections.get_connection(alias)
+
+    @classmethod
+    def get_doc_type(cls):
+        return cls._doc_type.name
+
+    @classmethod
     def from_django(cls, obj):
         doc = {
             'id': obj.id,
@@ -295,17 +313,37 @@ class WikiDocumentType(document.DocType):
 
         return settings
 
+    @classmethod
+    def bulk_index(cls, documents, id_field='id', es=None, index=None):
+        """Index of a bunch of documents."""
+        es = es or cls.get_connection()
+        index = index or cls.get_index()
+        type = cls.get_doc_type()
+
+        actions = [
+            {'_index': index, '_type': type, '_id': d['id'], '_source': d}
+            for d in documents]
+
+        bulk(es, actions)
+
+    @classmethod
+    def get_index(cls):
+        return Index.objects.get_current().prefixed_name
+
+    @classmethod
+    def search(cls, index=None):
+        es = connections.get_connection()
+        index = index or Index.objects.get_current().prefixed_name
+        return Search(using=es, index=index, doc_type=cls.get_doc_type())
+
     ###
     ### Old elasticutils methods below.
     ###
 
     @classmethod
     def get_model(cls):
+        from kuma.wiki.models import Document
         return Document
-
-    @classmethod
-    def get_index(cls):
-        return Index.objects.get_current().prefixed_name
 
     @classmethod
     def get_analysis(cls):
@@ -364,13 +402,14 @@ class WikiDocumentType(document.DocType):
         }
 
     @classmethod
-    def get_indexable(cls):
+    def get_indexable(cls, percent=100):
         """
         For this mapping type return a list of model IDs that should be
         indexed with the management command, in a full reindex.
 
         WARNING: When changing this code make sure to update the
                  ``should_update`` method below, too!
+
         """
         model = cls.get_model()
 
@@ -378,12 +417,17 @@ class WikiDocumentType(document.DocType):
         for exclude in cls.exclude_slugs:
             excludes.append(models.Q(slug__icontains=exclude))
 
-        return (model.objects
-                     .filter(is_template=False,
-                             is_redirect=False,
-                             deleted=False)
-                     .exclude(reduce(operator.or_, excludes))
-                     .values_list('id', flat=True))
+        qs = (model.objects
+                   .filter(is_template=False,
+                           is_redirect=False,
+                           deleted=False)
+                   .exclude(reduce(operator.or_, excludes)))
+
+        percent = float(percent) / 100
+        if percent < 1:
+            qs = qs[:int(qs.count() * percent)]
+
+        return qs.values_list('id', flat=True)
 
     @classmethod
     def should_update(cls, obj):

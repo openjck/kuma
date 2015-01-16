@@ -3,6 +3,7 @@ import time
 
 from django.conf import settings
 
+from elasticsearch_dsl.connections import connections
 from elasticsearch.exceptions import ConnectionError, NotFoundError
 from rest_framework.test import APIRequestFactory
 
@@ -11,7 +12,7 @@ from kuma.core.urlresolvers import reset_url_prefixer
 from kuma.core.middleware import LocaleURLMiddleware
 from kuma.users.tests import UserTestCase
 
-from ..index import get_index, get_indexing_es
+from ..models import Index
 
 
 class LocalizingAPIRequestFactory(LocalizingMixin, APIRequestFactory):
@@ -35,12 +36,16 @@ class ElasticTestCase(UserTestCase):
             cls.skipme = True
             return
 
-        # try to connect to ES and if it fails, skip ElasticTestCases.
         try:
-            get_indexing_es().cluster.health()
+            connections.get_connection().cluster.health()
         except ConnectionError:
             cls.skipme = True
             return
+
+        # Create an index all tests use.
+        index = Index.objects.get_current()
+        if index.pk is None:
+            index.save()
 
         cls._old_es_index_prefix = settings.ES_INDEX_PREFIX
         settings.ES_INDEX_PREFIX = settings.ES_INDEX_PREFIX + 'test'
@@ -72,36 +77,32 @@ class ElasticTestCase(UserTestCase):
         reset_url_prefixer()
 
     def refresh(self, timesleep=0):
-        index = get_index()
+        index = Index.objects.get_current().prefixed_name
         # Any time we're doing a refresh, we're making sure that the
         # index is ready to be queried.  Given that, it's almost
         # always the case that we want to run all the generated tasks,
         # then refresh.
-        get_indexing_es().indices.refresh(index=index)
+        connections.get_connection().indices.refresh(index=index)
         if timesleep > 0:
             time.sleep(timesleep)
 
-    def setup_indexes(self, empty=False, wait=True):
+    def setup_indexes(self, wait=True):
         """(Re-)create ES indexes."""
         from ..commands import es_reindex_cmd
 
-        if empty:
-            # Removes the index and creates a new one with nothing in
-            # it (by abusing the percent argument).
-            es_reindex_cmd(percent=0)
-        else:
-            # Removes the index, creates a new one, and indexes
-            # existing data into it.
-            es_reindex_cmd()
+        # Removes the index, creates a new one, and indexes
+        # existing data into it.
+        es_reindex_cmd()
 
         self.refresh()
         if wait:
-            get_indexing_es().cluster.health(wait_for_status='yellow')
+            connections.get_connection().cluster.health(wait_for_status='yellow')
 
     def teardown_indexes(self):
-        es = get_indexing_es()
+        es = connections.get_connection()
+        index = Index.objects.get_current().prefixed_name
         try:
-            es.indices.delete(get_index())
+            es.indices.delete(index)
         except NotFoundError:
             # If we get this error, it means the index didn't exist
             # so there's nothing to delete.
