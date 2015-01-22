@@ -2,7 +2,7 @@ from collections import namedtuple
 from operator import attrgetter
 from django.utils.datastructures import SortedDict
 
-from elasticutils.contrib.django import S
+from elasticsearch_dsl.search import Search
 from tower import ugettext as _
 
 from .utils import QueryURLObject
@@ -28,11 +28,11 @@ class Filter(namedtuple('Filter',
 FilterGroup = namedtuple('FilterGroup', ['name', 'slug', 'order', 'options'])
 
 
-class DocumentS(S):
+class DocumentS(Search):
     """
-    This S object acts more like Django's querysets to better match
-    the behavior of restframework's serializers as well as adding a
-    method to return our custom facets.
+    This `Search` object acts more like Django's querysets to better match
+    the behavior of restframework's serializers as well as adding a method
+    to return our custom facets.
     """
     def __init__(self, *args, **kwargs):
         self.url = kwargs.pop('url', None)
@@ -41,8 +41,8 @@ class DocumentS(S):
         self.selected_filters = kwargs.pop('selected_filters', None)
         super(DocumentS, self).__init__(*args, **kwargs)
 
-    def _clone(self, next_step=None):
-        new = super(DocumentS, self)._clone(next_step)
+    def _clone(self):
+        new = super(DocumentS, self)._clone()
         new.url = self.url
         new.current_page = self.current_page
         new.serialized_filters = self.serialized_filters
@@ -56,10 +56,13 @@ class DocumentS(S):
 
         filter_groups = SortedDict()
 
-        for slug, facet in self.facet_counts().items():
-            # if not isinstance(facet, dict):
-            #     # let's just blankly ignore any non-filter or non-query filters
-            #     continue
+        # TODO: Explore a way to not have to call `execute` here as we may have
+        # already made the query elsewhere.
+        result = self.execute()
+        facet_counts = [(k, result.facets[k]['count'])
+                        for k in filter_mapping.keys()]
+
+        for slug, count in facet_counts:
 
             filter_ = filter_mapping.get(slug, None)
             if filter_ is None:
@@ -81,7 +84,7 @@ class DocumentS(S):
                        page=self.current_page,
                        name=filter_name,
                        slug=slug,
-                       count=facet['count'],
+                       count=count,
                        active=slug in self.selected_filters,
                        group_name=group_name,
                        group_slug=group_slug))

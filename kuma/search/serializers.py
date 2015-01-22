@@ -3,6 +3,7 @@ from rest_framework import serializers, pagination
 from .fields import (SearchQueryField, DocumentExcerptField,
                      LocaleField, SiteURLField)
 from .models import Filter, FilterGroup
+from .paginator import SearchPaginator
 
 
 class FilterURLSerializer(serializers.Serializer):
@@ -26,6 +27,7 @@ class FacetedFilterSerializer(serializers.Serializer):
 
 class SearchSerializer(pagination.PaginationSerializer):
     results_field = 'documents'
+    paginator_class = SearchPaginator
 
     query = SearchQueryField(source='*')
     page = serializers.Field(source='number')
@@ -33,9 +35,8 @@ class SearchSerializer(pagination.PaginationSerializer):
     start = serializers.Field(source='start_index')
     end = serializers.Field(source='end_index')
     locale = LocaleField(source='*')
-    filters = FacetedFilterSerializer(source='paginator.object_list.'
-                                             'faceted_filters',
-                                      many=True)
+    filters = FacetedFilterSerializer(
+        source='paginator.object_list.faceted_filters', many=True)
 
 
 class BaseDocumentSerializer(serializers.Serializer):
@@ -49,7 +50,8 @@ class BaseDocumentSerializer(serializers.Serializer):
     def field_to_native(self, obj, field_name):
         if field_name == 'parent' and not getattr(obj, 'parent', None):
             return {}
-        return super(BaseDocumentSerializer, self).field_to_native(obj, field_name)
+        return super(BaseDocumentSerializer, self).field_to_native(obj,
+                                                                   field_name)
 
 
 class DocumentSerializer(BaseDocumentSerializer):
@@ -58,8 +60,7 @@ class DocumentSerializer(BaseDocumentSerializer):
     score = serializers.FloatField(read_only=True, source='es_meta.score')
     explanation = serializers.CharField(read_only=True,
                                         source='es_meta.explanation')
-    parent = BaseDocumentSerializer(read_only=True,
-                                    source='parent')
+    parent = BaseDocumentSerializer(read_only=True, source='parent')
 
 
 class FilterSerializer(serializers.ModelSerializer):

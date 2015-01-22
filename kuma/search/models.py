@@ -14,12 +14,12 @@ from django.utils.html import strip_tags
 from elasticsearch.helpers import bulk
 from elasticsearch_dsl import document, field
 from elasticsearch_dsl.connections import connections
-from elasticsearch_dsl.search import Search
 from elasticutils.contrib.django.tasks import index_objects
 
 from kuma.core.managers import PrefetchTaggableManager
 from kuma.core.urlresolvers import reverse
 
+from .queries import DocumentS
 from .signals import delete_index
 
 
@@ -331,10 +331,13 @@ class WikiDocumentType(document.DocType):
         return Index.objects.get_current().prefixed_name
 
     @classmethod
-    def search(cls, index=None):
-        es = connections.get_connection()
-        index = index or Index.objects.get_current().prefixed_name
-        return Search(using=es, index=index, doc_type=cls.get_doc_type())
+    def search(cls, **kwargs):
+        kwargs.update({
+            'using': connections.get_connection(),
+            'index': Index.objects.get_current().prefixed_name,
+            'doc_type': {cls._doc_type.name: cls.from_es},
+        })
+        return DocumentS(**kwargs)
 
     ###
     ### Old elasticutils methods below.

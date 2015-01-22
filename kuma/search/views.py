@@ -12,7 +12,6 @@ from .filters import (AdvancedSearchQueryBackend, DatabaseFilterBackend,
                       get_filters, HighlightFilterBackend,
                       LanguageFilterBackend, SearchQueryBackend)
 from .models import Filter, WikiDocumentType
-from .queries import DocumentS
 from .renderers import ExtendedTemplateHTMLRenderer
 from .serializers import (DocumentSerializer, FilterWithGroupSerializer,
                           SearchSerializer)
@@ -48,15 +47,17 @@ class SearchView(ListAPIView):
                                                                   'group')
                                                 .filter(enabled=True))
         self.serialized_filters = FilterWithGroupSerializer(self.available_filters,
-                                                   many=True).data
+                                                            many=True).data
         self.selected_filters = get_filters(self.request.QUERY_PARAMS.getlist)
 
     def get_queryset(self):
-        return DocumentS(WikiDocumentType,
-                         url=self.request.get_full_path(),
-                         current_page=self.current_page,
-                         serialized_filters=self.serialized_filters,
-                         selected_filters=self.selected_filters)
+        return WikiDocumentType.search(
+            index=WikiDocumentType.get_index(),
+            doc_type=WikiDocumentType.get_doc_type(),
+            url=self.request.get_full_path(),
+            current_page=self.current_page,
+            serialized_filters=self.serialized_filters,
+            selected_filters=self.selected_filters)
 
 search = SearchView.as_view()
 
