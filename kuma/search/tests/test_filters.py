@@ -1,8 +1,8 @@
 from nose.tools import ok_, eq_
 
 from . import ElasticTestCase
-from ..filters import (SearchQueryBackend, HighlightFilterBackend,
-                       LanguageFilterBackend, DatabaseFilterBackend)
+from ..filters import (SearchQueryBackend, LanguageFilterBackend,
+                       DatabaseFilterBackend)
 from ..views import SearchView
 
 
@@ -25,7 +25,7 @@ class FilterTests(ElasticTestCase):
     def test_highlight_filter(self):
 
         class HighlightView(SearchView):
-            filter_backends = (SearchQueryBackend, HighlightFilterBackend)
+            filter_backends = (SearchQueryBackend,)
 
         view = HighlightView.as_view()
         request = self.get_request('/en-US/search?q=article')

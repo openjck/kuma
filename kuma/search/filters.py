@@ -135,19 +135,6 @@ class AdvancedSearchQueryBackend(BaseFilterBackend):
         return queryset
 
 
-class HighlightFilterBackend(BaseFilterBackend):
-    """
-    A django-rest-framework filter backend that applies highlighting
-    based on the excerpt fields of the Document search index.
-    """
-    highlight_fields = WikiDocumentType.excerpt_fields
-
-    def filter_queryset(self, request, queryset, view):
-        for field in self.highlight_fields:
-            queryset = queryset.highlight(field)
-        return queryset
-
-
 class DatabaseFilterBackend(BaseFilterBackend):
     """
     A django-rest-framework filter backend that filters the given

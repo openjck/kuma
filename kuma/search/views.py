@@ -29,7 +29,6 @@ class SearchView(ListAPIView):
     filter_backends = (
         SearchQueryBackend,
         AdvancedSearchQueryBackend,
-        HighlightFilterBackend,
         DatabaseFilterBackend,
         LanguageFilterBackend,
     )
