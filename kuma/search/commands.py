@@ -6,9 +6,12 @@ from django.db import reset_queries
 
 from elasticsearch.exceptions import NotFoundError
 
+from kuma.wiki.tasks import index_documents
+from kuma.wiki.search import WikiDocumentType
+
 from .decorators import requires_good_connection
 from .index import recreate_index
-from .models import Index, WikiDocumentType
+from .models import Index
 from .utils import chunked, format_time
 
 
@@ -25,14 +28,12 @@ def es_reindex_cmd(chunk_size=1000, index=None, percent=100):
     :arg percent: 1 to 100--the percentage of the db to index.
 
     """
-    from .tasks import index_documents
-
     cls = WikiDocumentType
 
     index = index or Index.objects.get_current()
     index_name = index.prefixed_name
 
-    es = cls.get_connection('indexing')
+    es = cls.get_connection()
 
     log.info('Wiping and recreating %s....', index_name)
     recreate_index(es=es, index=index_name)

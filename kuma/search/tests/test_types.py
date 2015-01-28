@@ -1,9 +1,11 @@
 from nose.tools import ok_, eq_
 
 from kuma.wiki.models import Document
+from kuma.wiki.search import WikiDocumentType
+
+from elasticsearch_dsl import query
 
 from . import ElasticTestCase
-from ..models import WikiDocumentType
 
 
 class WikiDocumentTypeTests(ElasticTestCase):
@@ -11,41 +13,37 @@ class WikiDocumentTypeTests(ElasticTestCase):
 
     def test_get_excerpt_strips_html(self):
         self.refresh()
-        results = (WikiDocumentType.search().query(content__match='audio')
-                                            .highlight('content'))
+        results = (WikiDocumentType.search().query('match', content='audio'))
         ok_(results.count() > 0)
-        for doc in results:
+        for doc in results.execute():
             excerpt = doc.get_excerpt()
             ok_('audio' in excerpt)
             ok_('<strong>' not in excerpt)
 
     def test_get_excerpt_without_highlight_match(self):
         self.refresh()
-        results = (WikiDocumentType.search().query(or_={'title': 'lorem',
-                                                        'content': 'lorem'})
-                                            .highlight('content'))
+        results = (WikiDocumentType.search().query(query.Match(title='lorem') |
+                                                   query.Match(content='lorem')))
 
         ok_(results.count() > 0)
-        for doc in results:
+        for doc in results.execute():
             excerpt = doc.get_excerpt()
             eq_('audio is in this but the word for tough things'
                 ' will be ignored', excerpt)
 
     def test_current_locale_results(self):
         self.refresh()
-        results = (WikiDocumentType.search().query(or_={'title': 'article',
-                                                        'content': 'article'})
-                                            .filter(locale='en-US')
-                                            .highlight('content'))
-        for doc in results:
+        results = (WikiDocumentType.search().query(query.Match(title='article') |
+                                                   query.Match(content='article'))
+                                            .filter('term', locale='en-US'))
+        for doc in results.execute():
             eq_('en-US', doc.locale)
 
     def test_get_excerpt_uses_summary(self):
         self.refresh()
-        results = (WikiDocumentType.search().query(content__match='audio')
-                                            .highlight('content'))
+        results = (WikiDocumentType.search().query('match', content='audio'))
         ok_(results.count() > 0)
-        for doc in results:
+        for doc in results.execute():
             excerpt = doc.get_excerpt()
             ok_('the word for tough things' in excerpt)
             ok_('extra content' not in excerpt)

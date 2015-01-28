@@ -8,10 +8,13 @@ from rest_framework.generics import ListAPIView
 from rest_framework.renderers import JSONRenderer
 from waffle import flag_is_active
 
+from kuma.wiki.search import WikiDocumentType
+
 from .filters import (AdvancedSearchQueryBackend, DatabaseFilterBackend,
-                      get_filters, HighlightFilterBackend,
+                      get_filters,
                       LanguageFilterBackend, SearchQueryBackend)
-from .models import Filter, WikiDocumentType
+from .models import Filter
+from .paginator import SearchPaginator
 from .renderers import ExtendedTemplateHTMLRenderer
 from .serializers import (DocumentSerializer, FilterWithGroupSerializer,
                           SearchSerializer)
@@ -34,6 +37,7 @@ class SearchView(ListAPIView):
     )
     paginate_by = 10
     max_paginate_by = 100
+    paginator_class = SearchPaginator
     paginate_by_param = 'per_page'
     pagination_serializer_class = SearchSerializer
 
@@ -51,12 +55,11 @@ class SearchView(ListAPIView):
 
     def get_queryset(self):
         return WikiDocumentType.search(
-            index=WikiDocumentType.get_index(),
-            doc_type=WikiDocumentType.get_doc_type(),
             url=self.request.get_full_path(),
             current_page=self.current_page,
             serialized_filters=self.serialized_filters,
             selected_filters=self.selected_filters)
+
 
 search = SearchView.as_view()
 

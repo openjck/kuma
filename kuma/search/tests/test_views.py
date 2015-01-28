@@ -97,8 +97,9 @@ class ViewTests(ElasticTestCase):
                 response = super(QuerysetSearchView, self).list(*args,
                                                                 **kwargs)
                 # queryset content
-                eq_(self.object_list[0].title, 'an article title')
-                eq_(self.object_list[0].locale, 'en-US')
+                sq = self.object_list.execute()
+                eq_(sq[0].title, 'an article title')
+                eq_(sq[0].locale, 'en-US')
 
                 # metadata
                 eq_(self.object_list.current_page, 1)

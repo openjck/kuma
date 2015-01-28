@@ -2,6 +2,8 @@ import logging
 
 from django.conf import settings
 
+from kuma.wiki.search import WikiDocumentType
+
 
 log = logging.getLogger('kuma.search.signals')
 
@@ -10,8 +12,8 @@ def render_done_handler(**kwargs):
     if not settings.ES_LIVE_INDEX or 'instance' not in kwargs:
         return
 
-    from .models import Index, WikiDocumentType
-    from .tasks import index_documents
+    from .models import Index
+    from kuma.wiki.tasks import index_documents
 
     doc = kwargs['instance']
     if WikiDocumentType.should_update(doc):
@@ -35,8 +37,8 @@ def pre_delete_handler(**kwargs):
     if not settings.ES_LIVE_INDEX or 'instance' not in kwargs:
         return
 
-    from .models import Index, WikiDocumentType
-    from .tasks import unindex_documents
+    from .models import Index
+    from kuma.wiki.tasks import unindex_documents
 
     doc = kwargs['instance']
     current_index = Index.objects.get_current()

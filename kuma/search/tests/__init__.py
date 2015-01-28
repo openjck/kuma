@@ -44,8 +44,6 @@ class ElasticTestCase(UserTestCase):
 
         # Create an index all tests use.
         index = Index.objects.get_current()
-        if index.pk is None:
-            index.save()
 
         cls._old_es_index_prefix = settings.ES_INDEX_PREFIX
         settings.ES_INDEX_PREFIX = settings.ES_INDEX_PREFIX + 'test'

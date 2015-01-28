@@ -6,9 +6,10 @@ from elasticsearch_dsl.connections import connections
 from elasticsearch.exceptions import RequestError
 
 from kuma.wiki.models import Document
+from kuma.wiki.search import WikiDocumentType
 
 from . import ElasticTestCase
-from ..models import Index, WikiDocumentType
+from ..models import Index
 
 
 class TestIndexes(ElasticTestCase):
@@ -86,8 +87,6 @@ class TestIndexes(ElasticTestCase):
 
         # then create it again and see if it blows up
         es = connections.get_connection()
-
-        self.assertRaises(RequestError, es.indices.create, index.prefixed_name)
 
         # then delete it and check if recreating works without blowing up
         index.delete()

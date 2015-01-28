@@ -59,8 +59,11 @@ class DocumentS(Search):
         # TODO: Explore a way to not have to call `execute` here as we may have
         # already made the query elsewhere.
         result = self.execute()
-        facet_counts = [(k, result.facets[k]['count'])
-                        for k in filter_mapping.keys()]
+        try:
+            facet_counts = [(k, getattr(result, 'facets', {})[k]['count'])
+                            for k in filter_mapping.keys()]
+        except KeyError:
+            facet_counts = []
 
         for slug, count in facet_counts:
 

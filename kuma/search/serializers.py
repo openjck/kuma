@@ -1,4 +1,5 @@
 from rest_framework import serializers, pagination
+from elasticsearch_dsl import document
 
 from .fields import (SearchQueryField, DocumentExcerptField,
                      LocaleField, SiteURLField)
@@ -50,16 +51,19 @@ class BaseDocumentSerializer(serializers.Serializer):
     def field_to_native(self, obj, field_name):
         if field_name == 'parent' and not getattr(obj, 'parent', None):
             return {}
-        return super(BaseDocumentSerializer, self).field_to_native(obj,
-                                                                   field_name)
+        # We have to convert the object to an actual dict here to make
+        # sure the code in restframework works as it assumes a dict instance
+        if isinstance(obj, document.DocType):
+            obj = obj.to_dict()
+        return super(BaseDocumentSerializer, self).field_to_native(obj, field_name)
 
 
 class DocumentSerializer(BaseDocumentSerializer):
     excerpt = DocumentExcerptField(source='*')
     tags = serializers.ChoiceField(read_only=True, source='tags')
-    score = serializers.FloatField(read_only=True, source='es_meta.score')
+    score = serializers.FloatField(read_only=True, source='_meta.score')
     explanation = serializers.CharField(read_only=True,
-                                        source='es_meta.explanation')
+                                        source='_meta.explanation')
     parent = BaseDocumentSerializer(read_only=True, source='parent')
 
 

@@ -2,7 +2,9 @@ import logging
 
 from elasticsearch.exceptions import RequestError, NotFoundError
 
-from .models import Index, WikiDocumentType
+from kuma.wiki.search import WikiDocumentType
+
+from .models import Index
 
 
 log = logging.getLogger('kuma.search.index')

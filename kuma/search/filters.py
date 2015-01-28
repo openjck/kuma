@@ -6,7 +6,7 @@ from elasticsearch_dsl import F, Q, query
 from rest_framework.filters import BaseFilterBackend
 from waffle import flag_is_active
 
-from .models import WikiDocumentType, Filter, FilterGroup
+from .models import Filter, FilterGroup
 
 
 def get_filters(getter_func):

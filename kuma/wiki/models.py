@@ -57,6 +57,7 @@ from .managers import (TransformManager, DocumentManager,
                        TaggedDocumentManager, DeletedDocumentManager,
                        DocumentAdminManager, DocumentZoneManager,
                        RevisionIPManager)
+from .search import WikiDocumentType
 from .signals import render_done
 
 add_introspection_rules([], ["^utils\.OverwritingFileField"])
@@ -1468,7 +1469,6 @@ Full traceback:
         return EditDocumentEvent.is_notifying(user, self)
 
     def get_mapping_type(self):
-        from kuma.search.models import WikiDocumentType
         return WikiDocumentType
 
     def get_contributors(self):
