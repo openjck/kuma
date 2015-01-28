@@ -1195,14 +1195,13 @@ LOGGING = {
             'level': logging.DEBUG,
         },
         'elasticsearch': {
-            'level': logging.DEBUG,
+            'level': logging.WARN,
             'handlers': ['console'],
         },
-        # Set to DEBUG if you want pretty printed ES queries and responses.
-        'elasticsearch.trace': {
-            'level': logging.DEBUG,
+        'urllib3': {
+            'level': logging.ERROR,
             'handlers': ['console'],
-        },
+        }
     },
 }
 
