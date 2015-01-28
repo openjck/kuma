@@ -45,7 +45,7 @@ class LanguageFilterBackend(BaseFilterBackend):
             locales = [request.locale]
         else:
             locales = [request.locale, settings.LANGUAGE_CODE]
-        sq = {
+        positive_sq = {
             'filtered': {
                 'query': sq,
                 'filter': {
@@ -53,19 +53,18 @@ class LanguageFilterBackend(BaseFilterBackend):
                 }
             }
         }
-        return queryset.extra(
-            boosting={
-                'positive': sq,
-                'negative': {
-                    'bool': {
-                        'must_not': {
-                            'term': {'locale': request.locale}
-                        }
+        negative_sq = {
+            'bool': {
+                'must_not': [
+                    {
+                        'term': {'locale': request.locale},
                     }
-                },
-                "negative_boost": 0.5
-            }
-        )
+                ],
+            },
+        }
+        return queryset.query(query.Boosting(positive=positive_sq,
+                                             negative=negative_sq,
+                                             negative_boost=0.5))
 
 
 class SearchQueryBackend(BaseFilterBackend):
@@ -193,8 +192,6 @@ class DatabaseFilterBackend(BaseFilterBackend):
             facet_filter = queryset.to_dict().get('filter', [])
         else:
             facet_filter = unfiltered_queryset.to_dict().get('filter', [])
-
-        print facet_filter
 
         # TODO: Convert to use aggregations.
         for facet_slug, facet_params in active_facets:
