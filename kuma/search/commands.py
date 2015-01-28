@@ -33,7 +33,7 @@ def es_reindex_cmd(chunk_size=1000, index=None, percent=100):
     index = index or Index.objects.get_current()
     index_name = index.prefixed_name
 
-    es = cls.get_connection()
+    es = cls.get_connection('indexing')
 
     log.info('Wiping and recreating %s....', index_name)
     recreate_index(es=es, index=index_name)
