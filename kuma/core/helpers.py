@@ -1,5 +1,6 @@
 import datetime
 import HTMLParser
+import json
 import os
 import urllib
 import urlparse
@@ -8,6 +9,7 @@ from django.http import QueryDict
 from django.utils.encoding import smart_str
 from django.utils.http import urlencode as urlencode_util
 from django.utils.tzinfo import LocalTimezone
+from django.templatetags.static import static
 
 from babel import localedata
 from babel.dates import format_date, format_time, format_datetime
@@ -349,3 +351,16 @@ def number(context, n):
     if n is None:
         return ''
     return format_decimal(n, locale=_babel_locale(_contextual_locale(context)))
+
+@register.function
+@jinja2.contextfunction
+def cache_bust(context, path):
+    """Return the versioned filename of an asset in media/, given its
+    non-versioned filename."""
+    with open('media/rev-manifest.json') as manifest_data:
+        manifest = json.loads(manifest_data.read())
+
+        try:
+            return static(settings.MEDIA_URL + manifest[path])
+        except KeyError:
+            return static(settings.MEDIA_URL + path)

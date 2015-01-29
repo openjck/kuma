@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from collections import namedtuple
 from datetime import datetime
+from os.path import basename, getsize, isfile
+from glob import glob
+import re
 
 import jingo
 from nose.tools import eq_, ok_, assert_raises
@@ -10,6 +13,7 @@ import test_utils
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import RequestFactory
+from django.templatetags.static import static
 
 from babel.dates import format_date, format_time, format_datetime
 from pyquery import PyQuery as pq
@@ -23,7 +27,7 @@ from kuma.core.urlresolvers import reverse
 from ..exceptions import DateTimeFormatError
 from ..helpers import (timesince, urlparams, yesno, urlencode,
                        soapbox_messages, get_soapbox_messages,
-                       datetimeformat, jsonencode, number)
+                       datetimeformat, jsonencode, number, cache_bust)
 
 
 def render(s, context={}):
@@ -67,6 +71,26 @@ class TestHelpers(test_utils.TestCase):
         eq_('No', yesno(False))
         eq_('Yes', yesno(1))
         eq_('No', yesno(0))
+
+    def test_cache_bust(self):
+        context = {'request': namedtuple('R', 'locale')('en-US')}
+        manifest = 'media/rev-manifest.json'
+
+        ok_(isfile(manifest))
+        ok_(getsize(manifest) > 0)
+
+        # Test the case of a match being found
+        versioned_scripts = glob('media/build/js/*.js')
+        versioned_script = basename(
+            versioned_scripts[len(versioned_scripts) / 2]
+        )
+        unversioned_script = re.sub('-min-.*\.js', '-min.js', versioned_script)
+        eq_(cache_bust(context, 'build/js/' + unversioned_script),
+            static(settings.MEDIA_URL + 'build/js/' + versioned_script))
+
+        # Test the case of a match not being found
+        eq_(cache_bust(context, 'build/js/_test.js'),
+            static(settings.MEDIA_URL + 'build/js/_test.js'))
 
 
 class TimesinceTests(test_utils.TestCase):
