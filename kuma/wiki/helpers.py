@@ -12,7 +12,7 @@ from tower import ugettext as _
 
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.core.cache import cache
+from django.core.cache import get_cache
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.html import conditional_escape
 
@@ -23,6 +23,8 @@ from teamwork.shortcuts import build_policy_admin_links
 from kuma.core.urlresolvers import reverse
 from .constants import DIFF_WRAP_COLUMN
 from .models import Document
+
+memcache = get_cache('memcache')
 
 register.function(build_policy_admin_links)
 
@@ -318,22 +320,15 @@ def devmo_url(context, path):
     Create a URL pointing to Kuma.
     Look for a wiki page in the current locale, or default to given path
     """
-    if hasattr(context['request'], 'locale'):
-        locale = context['request'].locale
-    else:
-        locale = settings.WIKI_DEFAULT_LANGUAGE
-    try:
-        url = cache.get('devmo_url:%s_%s' % (locale, path))
-    except:
-        return path
+    fallback_locale = settings.WIKI_DEFAULT_LANGUAGE
+    locale = getattr(context['request'], 'locale', fallback_locale)
+    url = memcache.get('devmo_url:%s_%s' % (locale, path))
+
     if not url:
-        url = reverse('wiki.document',
-                      locale=settings.WIKI_DEFAULT_LANGUAGE,
-                      args=[path])
-        if locale != settings.WIKI_DEFAULT_LANGUAGE:
+        url = reverse('wiki.document', locale=fallback_locale, args=[path])
+        if locale != fallback_locale:
             try:
-                parent = Document.objects.get(
-                    locale=settings.WIKI_DEFAULT_LANGUAGE, slug=path)
+                parent = Document.objects.get(locale=fallback_locale, slug=path)
                 """ # TODO: redirect_document is coupled to doc view
                 follow redirects vs. update devmo_url calls
 
@@ -341,11 +336,9 @@ def devmo_url(context, path):
                 if target:
                 parent = target
                 """
-                child = Document.objects.get(locale=locale,
-                                             parent=parent)
-                url = reverse('wiki.document', locale=locale,
-                              args=[child.slug])
+                child = Document.objects.get(locale=locale, parent=parent)
+                url = child.get_absolute_url(ui_locale=locale)
             except Document.DoesNotExist:
                 pass
-        cache.set('devmo_url:%s_%s' % (locale, path), url)
+        memcache.set('devmo_url:%s_%s' % (locale, path), url)
     return url
