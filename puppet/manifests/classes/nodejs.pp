@@ -50,4 +50,9 @@ class nodejs {
             File["/home/vagrant/src/kumascript/node_modules/fibers"]
         ]
     }
+
+    exec { 'npm-install':
+        command => '/bin/su - vagrant -s /bin/bash -c "cd src && rm -rf node_modules && npm cache clear && npm install"',
+        require => Package['nodejs']
+    }
 }
