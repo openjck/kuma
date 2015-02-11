@@ -12,10 +12,8 @@
         "ckeditor-dev": "4.4.7",
         "ckbuilder-1.7.2": "http://download.cksource.com/CKBuilder/1.7.2/ckbuilder.jar",
         "ckeditor-plugin-descriptionlist": "https://github.com/Reinmar/ckeditor-plugin-descriptionlist.git#e365ac622a995d535266c22f0c44b743f8fffa14",
-        "ckeditor-plugin-scayt": "https://github.com/WebSpellChecker/ckeditor-plugin-scayt.git#f517c326bd0eee9d8a748935aa78470053f3c170",
-        "ckeditor-plugin-tablesort": "http://plab-server.ucsd.edu/deki/plugins/page_editor_ckeditor/ckeditor/mindtouch/plugins/tablesort/",
-        "ckeditor-plugin-texzilla": "https://github.com/r-gaia-cs/CKEditor-TeXZilla.git#1.2.1",
-        "ckeditor-plugin-wsc": "https://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#a2f3dd02641d3d93ade7e1fcd5a1fb09d1b05eef",
-        "ckeditor-plugin-youtube": "https://github.com/fonini/ckeditor-youtube-plugin.git#5eea44bef7548c680c96320d1ce41bc04576d5d2"
+        "ckeditor-plugin-scayt": "https://github.com/WebSpellChecker/ckeditor-plugin-scayt.git#051a105da361541fed1c1e0c876d0067e67749d9",
+        "ckeditor-plugin-tablesort": "1.0.0",
+        "ckeditor-plugin-wsc": "https://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#571bdc9df2664d66939cdcac19064e7f28606462"
     }
 }

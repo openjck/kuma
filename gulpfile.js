@@ -18,7 +18,7 @@ var buildDirectory = 'gulp-build/';
 var jsBundlesDirectory = mediaDirectory + 'build/js/';
 var jsBundles = {
     'main': [
-        'lib/js/jquery/dist/jquery.js',
+        'lib/front-end/jquery/dist/jquery.js',
         'media/js/components.js',
         'media/js/analytics.js',
         'media/js/main.js',
@@ -26,7 +26,7 @@ var jsBundles = {
         'media/js/badges.js'
     ],
     'home': [
-        'lib/js/OwlCarousel/owl-carousel/owl.carousel.js',
+        'lib/front-end/OwlCarousel/owl-carousel/owl.carousel.js',
         'media/js/home.js'
     ],
     'popup': [
@@ -42,8 +42,8 @@ var jsBundles = {
         'media/js/calendar.js'
     ],
     'demostudio': [
-        'lib/js/jquery.hoverIntent-1.5.0/index.js',
-        'lib/js/jquery.scrollTo-1.4.2/index.js',
+        'lib/front-end/jquery.hoverIntent-1.5.0/index.js',
+        'lib/front-end/jquery.scrollTo-1.4.2/index.js',
         'media/js/demos.js',
         'media/js/libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js',
         'media/js/modal-control.js'
@@ -66,10 +66,10 @@ var jsBundles = {
         'media/js/framebuster.js'
     ],
     'syntax-prism': [
-        'lib/js/prism/prism.js',
+        'lib/front-end/prism/prism.js',
         'media/js/prism-mdn/components/prism-json.js',
         'media/js/prism-mdn/plugins/line-numbering/prism-line-numbering.js',
-        'lib/js/prism/plugins/line-highlight/prism-line-highlight.js',
+        'lib/front-end/prism/plugins/line-highlight/prism-line-highlight.js',
         'media/js/syntax-prism.js'
     ],
     'search-suggestions': [
@@ -91,10 +91,10 @@ var jsBundles = {
         'media/js/newsletter.js'
     ],
     'html5shiv': [
-        'lib/js/html5shiv/dist/html5shiv.js'
+        'lib/front-end/html5shiv/dist/html5shiv.js'
     ],
     'jquery.hoverIntent': [
-        'lib/js/jquery.hoverIntent-1.5.0/index.js'
+        'lib/front-end/jquery.hoverIntent-1.5.0/index.js'
     ]
 };
 
@@ -115,15 +115,15 @@ gulp.task('install-javascript-dependencies', function() {
 gulp.task('build-ckeditor', function() {
     var ckeBuildDirectory = buildDirectory + 'ckeditor/';
     var ckePlugins = [
-        'lib/js/ckeditor-plugin-*/**/*',
+        'lib/front-end/ckeditor-plugin-*/**/*',
         'media/js/ckeditor/plugins/*/**/*'
     ];
 
-    // Move CKEditor to a temporary build directory
-    gulp.src('lib/js/ckeditor-dev/**/*')
+    // Copy CKEditor to a temporary build directory
+    gulp.src('lib/front-end/ckeditor-dev/**/*')
         .pipe(gulp.dest(ckeBuildDirectory))
 
-        // Move CKEditor plugins to the "plugins" subdirectory
+        // Copy CKEditor plugins to the "plugins" subdirectory
         .on('end', function() {
             gulp.src(ckePlugins)
                 .pipe(rename(function(path) {
@@ -132,40 +132,18 @@ gulp.task('build-ckeditor', function() {
                     }
                 }))
                 .pipe(gulp.dest(ckeBuildDirectory + 'plugins'))
+
+                // Build CKEditor
                 .on('end', function() {
                     gulp.src('./')
-                        .pipe(shell('java -Xmx1024m -jar lib/js/ckbuilder-1.7.2/index.jar --build gulp-build/ckeditor cke-build -s --version="4.4.7" --revision affa883 --build-config media/js/ckeditor/config.js --overwrite --no-tar --no-zip'))
+                        .pipe(shell('java -Xmx1024m -jar lib/front-end/ckbuilder-1.7.2/index.jar --build gulp-build/ckeditor cke-build -s --version="4.4.7" --revision affa883 --build-config media/js/ckeditor/config.js --overwrite --no-tar --no-zip'))
+
+                        // Delete the temporary build directory
+                        .on('end', function() {
+                            del(ckeBuildDirectory);
+                        });
                 })
-
-                // Delete the temporary build directory
-                // .on('end', function() {
-                //     del(ckeBuildDirectory);
-                // });
         });
-
-    // Pseudo-code:
-    //     * Move ckeditor-dev into a temporary build directory
-    //     * Move all plugins into the "plugins" directory of that
-    //         * Bower-managed plugins
-    //         * Source-controlled plugins
-    //     * Run the Java command
-
-//     gulp.src('./')
-//         .pipe(shell('mkdir -p tmp/build')).on('end', function() {
-//             gulp.src('lib/js/ckeditor-dev/**/*')
-//                 .pipe(gulp.dest('tmp/build/ckeditor'))
-//                 .on('end', function() {
-//                     gulp.src('lib/js/ckeditor-plugin-*/**/*')
-//                         .pipe(gulp.dest('tmp/build/ckeditor/plugins'))
-//                         .on('end', function() {
-//                             gulp.src('media/js/ckeditor/plugins/*/**/*')
-//                                 .pipe(gulp.dest('tmp/build/ckeditor/plugins'))
-// //                                .pipe(shell('mmv -r "tmp/build/ckeditor/plugins/ckeditor-plugin-\*" \#1'))
-//                                 .pipe(shell('java -jar lib/js/ckbuilder-1.7.2/index.jar --build tmp/build/ckeditor cke-build -s --version="4.4.7" --revision affa883 --build-config media/js/ckeditor/config.js --overwrite --no-tar --no-zip'))
-//                                 .pipe(shell('rm -rf tmp'));
-//                         });
-//                 });
-//         });
 });
 
 /**
