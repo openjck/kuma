@@ -2,11 +2,20 @@
     "name": "Kuma",
     "private": true,
     "dependencies": {
+        "OwlCarousel": "1.3.2",
         "html5shiv": "3.7.2",
         "jquery": "2.1.0",
         "jquery.hoverIntent-1.5.0": "http://cherne.net/brian/resources/jquery.hoverIntent-1.5.0.js",
         "jquery.scrollTo-1.4.2": "https://flesler-plugins.googlecode.com/files/jquery.scrollTo-1.4.2.js",
-        "OwlCarousel": "1.3.2",
-        "prism": "https://github.com/LeaVerou/prism.git#af7a42a414a7d061f1b7546804b1212726390847"
+        "prism": "https://github.com/LeaVerou/prism.git#af7a42a414a7d061f1b7546804b1212726390847",
+
+        "ckeditor-dev": "4.4.7",
+        "ckbuilder-1.7.2": "http://download.cksource.com/CKBuilder/1.7.2/ckbuilder.jar",
+        "ckeditor-plugin-descriptionlist": "https://github.com/Reinmar/ckeditor-plugin-descriptionlist.git#e365ac622a995d535266c22f0c44b743f8fffa14",
+        "ckeditor-plugin-scayt": "https://github.com/WebSpellChecker/ckeditor-plugin-scayt.git#f517c326bd0eee9d8a748935aa78470053f3c170",
+        "ckeditor-plugin-tablesort": "http://plab-server.ucsd.edu/deki/plugins/page_editor_ckeditor/ckeditor/mindtouch/plugins/tablesort/",
+        "ckeditor-plugin-texzilla": "https://github.com/r-gaia-cs/CKEditor-TeXZilla.git#1.2.1",
+        "ckeditor-plugin-wsc": "https://github.com/WebSpellChecker/ckeditor-plugin-wsc.git#a2f3dd02641d3d93ade7e1fcd5a1fb09d1b05eef",
+        "ckeditor-plugin-youtube": "https://github.com/fonini/ckeditor-youtube-plugin.git#5eea44bef7548c680c96320d1ce41bc04576d5d2"
     }
 }

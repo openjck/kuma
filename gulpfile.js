@@ -3,8 +3,10 @@ var gulp = require('gulp');
 // Plugins
 var concat = require('gulp-concat');
 var del = require('del');
+var git = require('gulp-git');
 var install = require('gulp-install');
 var path = require('path');
+var rename = require('gulp-rename');
 var rev = require('gulp-rev');
 var shell = require('gulp-shell');
 var uglify = require('gulp-uglify');
@@ -12,6 +14,7 @@ var uglify = require('gulp-uglify');
 var npmDependencies = 'package.json';
 var jsDependencies = 'bower.json';
 var mediaDirectory = 'media/';
+var buildDirectory = 'gulp-build/';
 var jsBundlesDirectory = mediaDirectory + 'build/js/';
 var jsBundles = {
     'main': [
@@ -95,7 +98,7 @@ var jsBundles = {
     ]
 };
 
-gulp.task('default', ['compress-javascript']);
+gulp.task('default', ['compress-javascript', 'build-ckeditor']);
 
 gulp.task('compress-javascript', ['install-javascript-dependencies'], function() {
     // Delete the old bundles and make new ones
@@ -107,6 +110,62 @@ gulp.task('compress-javascript', ['install-javascript-dependencies'], function()
 gulp.task('install-javascript-dependencies', function() {
     return gulp.src(jsDependencies)
                .pipe(install());
+});
+
+gulp.task('build-ckeditor', function() {
+    var ckeBuildDirectory = buildDirectory + 'ckeditor/';
+    var ckePlugins = [
+        'lib/js/ckeditor-plugin-*/**/*',
+        'media/js/ckeditor/plugins/*/**/*'
+    ];
+
+    // Move CKEditor to a temporary build directory
+    gulp.src('lib/js/ckeditor-dev/**/*')
+        .pipe(gulp.dest(ckeBuildDirectory))
+
+        // Move CKEditor plugins to the "plugins" subdirectory
+        .on('end', function() {
+            gulp.src(ckePlugins)
+                .pipe(rename(function(path) {
+                    if(path.dirname.indexOf('ckeditor-plugin-') > -1) {
+                        path.dirname = path.dirname.replace('ckeditor-plugin-', '')
+                    }
+                }))
+                .pipe(gulp.dest(ckeBuildDirectory + 'plugins'))
+                .on('end', function() {
+                    gulp.src('./')
+                        .pipe(shell('java -Xmx1024m -jar lib/js/ckbuilder-1.7.2/index.jar --build gulp-build/ckeditor cke-build -s --version="4.4.7" --revision affa883 --build-config media/js/ckeditor/config.js --overwrite --no-tar --no-zip'))
+                })
+
+                // Delete the temporary build directory
+                // .on('end', function() {
+                //     del(ckeBuildDirectory);
+                // });
+        });
+
+    // Pseudo-code:
+    //     * Move ckeditor-dev into a temporary build directory
+    //     * Move all plugins into the "plugins" directory of that
+    //         * Bower-managed plugins
+    //         * Source-controlled plugins
+    //     * Run the Java command
+
+//     gulp.src('./')
+//         .pipe(shell('mkdir -p tmp/build')).on('end', function() {
+//             gulp.src('lib/js/ckeditor-dev/**/*')
+//                 .pipe(gulp.dest('tmp/build/ckeditor'))
+//                 .on('end', function() {
+//                     gulp.src('lib/js/ckeditor-plugin-*/**/*')
+//                         .pipe(gulp.dest('tmp/build/ckeditor/plugins'))
+//                         .on('end', function() {
+//                             gulp.src('media/js/ckeditor/plugins/*/**/*')
+//                                 .pipe(gulp.dest('tmp/build/ckeditor/plugins'))
+// //                                .pipe(shell('mmv -r "tmp/build/ckeditor/plugins/ckeditor-plugin-\*" \#1'))
+//                                 .pipe(shell('java -jar lib/js/ckbuilder-1.7.2/index.jar --build tmp/build/ckeditor cke-build -s --version="4.4.7" --revision affa883 --build-config media/js/ckeditor/config.js --overwrite --no-tar --no-zip'))
+//                                 .pipe(shell('rm -rf tmp'));
+//                         });
+//                 });
+//         });
 });
 
 /**
