@@ -11,10 +11,11 @@ see also: https://gist.github.com/796214
 @@TODO: Add more video services / find a safe way to use embed.ly?
 """
 import re
+
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from jinja2.utils import Markup
-from django.core.exceptions import ValidationError
 
 YOUTUBE_URL_RE = re.compile('''
     ^ # start
@@ -46,11 +47,11 @@ EMBED_PATTERNS = (
     (VIMEO_URL_RE, VIMEO_EMBED_URL)
 )
 
-EMBED_CODE = ( 
-    '<iframe type="text/html" width="%(width)d" height="%(height)d" ' +
+EMBED_CODE = (
+    '<iframe type="text/html" width="%(width)d" height="%(height)d" '
     '    src="%(url)s" frameborder="0"></iframe>'
 )
-DEFAULT_ARGS = { 'width': 480, 'height': 360 }
+DEFAULT_ARGS = {'width': 480, 'height': 360}
 
 
 def build_video_embed(url, **kwargs):
@@ -63,7 +64,7 @@ def build_video_embed(url, **kwargs):
             return EMBED_CODE % args
     return None
 
-    
+
 class VideoEmbedURL(object):
     """Proxy for access on a VideoEmbedURLField, offers embed_html property"""
 
@@ -75,15 +76,16 @@ class VideoEmbedURL(object):
     def __unicode__(self):
         return self.value
 
-    def _get_embed_html(self):
+    @property
+    def embed_html(self):
         return Markup(build_video_embed(self.value))
-    embed_html = property(_get_embed_html)
 
 
 class VideoEmbedURLDescriptor(object):
-    """Transforms a plain URL into VideoEmbedURL on field access
-    see also: django.db.models.fields.files.FileField"""
-
+    """
+    Transforms a plain URL into VideoEmbedURL on field access
+    see also: django.db.models.fields.files.FileField
+    """
     def __init__(self, field):
         self.field = field
 
@@ -113,9 +115,10 @@ class VideoEmbedURLDescriptor(object):
 
 
 class VideoEmbedURLField(models.URLField):
-    """URL field with the magical ability to enable media embedding via the
-    embed_html property"""
-
+    """
+    URL field with the magical ability to enable media embedding via the
+    embed_html property
+    """
     attr_class = VideoEmbedURL
     descriptor_class = VideoEmbedURLDescriptor
 
@@ -126,7 +129,7 @@ class VideoEmbedURLField(models.URLField):
 
     def get_prep_value(self, field_value):
         "Returns field's value prepared for saving into a database."
-        if field_value is None or field_value.value is None: 
+        if field_value is None or field_value.value is None:
             return ''
         return unicode(field_value)
 
@@ -136,7 +139,7 @@ class VideoEmbedURLField(models.URLField):
 
 try:
     import south.modelsinspector
-    south.modelsinspector.add_introspection_rules([ ], ["^embedutils.VideoEmbedURLField"])
+    south.modelsinspector.add_introspection_rules(
+        [], ["^kuma.demos.embed.VideoEmbedURLField"])
 except ImportError:
     pass
-
