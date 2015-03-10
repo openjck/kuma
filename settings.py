@@ -530,7 +530,6 @@ INSTALLED_APPS = (
 
     # testing.
     'django_nose',
-    'test_utils',
 
     # other
     'kuma.humans',
@@ -538,13 +537,11 @@ INSTALLED_APPS = (
     'badger',
 )
 
-TEST_RUNNER = 'test_utils.runner.RadicalTestSuiteRunner'
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 NOSE_ARGS = [
     '--traverse-namespace',  # make sure `./manage.py test kuma` works
 ]
-
-TEST_UTILS_NO_TRUNCATE = ('django_content_type',)
 
 # Feed fetcher config
 FEEDER_TIMEOUT = 6  # in seconds

@@ -1,14 +1,14 @@
 import bitly_api
 from django.conf import settings
 import mock
-from nose.tools import eq_, ok_
-import test_utils
+from nose.tools import eq_
 
 from kuma.core.cache import memcache
+from kuma.core.tests import KumaTestCase
 from ..helpers import tag_description, bitly_shorten, bitly
 
 
-class HelperTestCase(test_utils.TestCase):
+class HelperTestCase(KumaTestCase):
 
     def test_tag_description_no_description(self):
         settings.TAG_DESCRIPTIONS = {
