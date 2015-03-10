@@ -30,6 +30,11 @@
 
 {% block content %}
 <section id="content">
+<div class="row">
+    {% if messages %}
+    <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+    {% endif %}
+</div>
 <div class="wrap">
 
   <section id="content-main" class="full">

@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
@@ -199,6 +200,7 @@ def on_user_signed_up(sender, request, user, **kwargs):
         # only send if the user has already verified at least one email address
         if user.emailaddress_set.filter(verified=True).exists():
             send_welcome_email.delay(user.pk, request.locale)
+            messages.success(request, 'You have completed the first part of <a href="%s">Getting started with MDN</a>' % wiki_url('MDN/Kuma/Contributing/Getting_started'))
 
 
 @receiver(email_confirmed)
