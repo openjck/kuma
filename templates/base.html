@@ -161,6 +161,11 @@
   <main id="content"><div class="center clear">
   {% block content %}{% endblock %}
   </div></main>
+  <div>
+      {% if messages %}
+      {{ messages }}
+      {% endif %}
+  </div>
 
   <!-- Footer -->
   <footer><div class="center">
