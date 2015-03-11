@@ -200,11 +200,12 @@ def on_user_signed_up(sender, request, user, **kwargs):
         # only send if the user has already verified at least one email address
         if user.emailaddress_set.filter(verified=True).exists():
             send_welcome_email.delay(user.pk, request.locale)
-            messages.success(request, 'You have completed the first part of <a href="%s">Getting started with MDN</a>' % wiki_url('MDN/Kuma/Contributing/Getting_started'))
+            messages.success(request, 'Hey there!')
 
 
 @receiver(email_confirmed)
 def on_email_confirmed(sender, request, email_address, **kwargs):
+    messages.success(request, 'Hello!!')
     if switch_is_active('welcome_email'):
         # only send if the user has exactly one verified (the given)
         # email address, in other words if it was just confirmed
