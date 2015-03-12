@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse, HttpResponseRedirect
+from django.utils import timezone
 from django.template.response import TemplateResponse
 
 from kuma.core.decorators import login_required, permission_required
@@ -15,7 +16,7 @@ from .models import (Document, DocumentZone, DocumentTag,
 
 
 def dump_selected_documents(self, request, queryset):
-    filename = "documents_%s.json" % (datetime.now().isoformat(),)
+    filename = "documents_%s.json" % (timezone.now().isoformat(),)
     response = HttpResponse(mimetype="text/plain")
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     Document.objects.dump_json(queryset, response)

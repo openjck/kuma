@@ -3,6 +3,8 @@ import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
+from django.utils import timezone
+
 
 class Migration(SchemaMigration):
 
@@ -17,7 +19,7 @@ class Migration(SchemaMigration):
             ('slug', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, db_index=True)),
             ('mime_type', self.gf('django.db.models.fields.CharField')(max_length=255, db_index=True)),
             ('description', self.gf('django.db.models.fields.TextField')()),
-            ('created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(default=timezone.now)),
             ('comment', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('creator', self.gf('django.db.models.fields.related.ForeignKey')(related_name='created_attachment_revisions', to=orm['auth.User'])),
             ('is_approved', self.gf('django.db.models.fields.BooleanField')(default=True, db_index=True)),

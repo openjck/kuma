@@ -10,7 +10,7 @@ import jsonpickle
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
 from django.db import IntegrityError
-from django.utils import encoding, hashcompat
+from django.utils import encoding, hashcompat, timezone
 
 from kuma.core.utils import file_lock
 from kuma.feeder.models import Feed, Entry
@@ -114,7 +114,7 @@ class Command(NoArgsCommand):
         if feed.etag is None:
             feed.etag = ''
         if feed.last_modified is None:
-            feed.last_modified = datetime.datetime(1975, 1, 10)
+            feed.last_modified = timezone.datetime(1975, 1, 10)
         log.debug("feed id=%s feed url=%s etag=%s last_modified=%s" % (
             feed.shortname, feed.url, feed.etag, str(feed.last_modified)))
         try:
@@ -229,10 +229,10 @@ class Command(NoArgsCommand):
 
             if 'updated_parsed' in entry:
                 yr, mon, d, hr, min, sec = entry.updated_parsed[:-3]
-                last_publication = datetime.datetime(yr, mon, d, hr, min, sec)
+                last_publication = timezone.datetime(yr, mon, d, hr, min, sec)
             else:
                 log.warn("Entry has no updated field, faking it")
-                last_publication = datetime.datetime.now()
+                last_publication = timezone.now()
 
             new_entry = Entry(feed=feed, guid=entry_guid, raw=json_entry,
                               visible=True, last_published=last_publication)

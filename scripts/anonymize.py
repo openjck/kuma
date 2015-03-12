@@ -16,6 +16,9 @@ import sys
 from textwrap import dedent
 from optparse import OptionParser
 
+from django.utils import timezone
+
+
 #
 # We don't just dump everything, because every new table needs to be reviewed
 # with regards to santizing.
@@ -104,7 +107,7 @@ def sysprint(command):
 
 
 def main():
-    now = datetime.now().strftime('%Y%m%d')
+    now = timezone.now().strftime('%Y%m%d')
 
     usage = """\
         %%prog [options] DB_NAME

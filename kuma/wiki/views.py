@@ -26,6 +26,7 @@ from django.http.multipartparser import MultiPartParser
 from django.shortcuts import (get_object_or_404, render_to_response, redirect,
                               render)
 from django.template import RequestContext
+from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.views.decorators.http import (require_GET, require_POST,
                                           require_http_methods, condition)
@@ -99,7 +100,7 @@ def _document_last_modified(request, document_slug, document_locale):
             last_mod = doc.fill_last_modified_cache()
 
         # Convert the cached Unix epoch seconds back to Python datetime
-        return datetime.fromtimestamp(float(last_mod))
+        return timezone.datetime.fromtimestamp(float(last_mod))
 
     except Document.DoesNotExist:
         return None

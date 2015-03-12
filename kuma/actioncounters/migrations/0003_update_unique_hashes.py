@@ -1,8 +1,8 @@
 # encoding: utf-8
 import datetime
 from django.db import IntegrityError
+from django.utils import timezone
 from south.v2 import DataMigration
-
 
 class Migration(DataMigration):
 
@@ -16,7 +16,7 @@ class Migration(DataMigration):
         # but wasn't implemented before this migration. Doing it now, so the
         # data migration has a smaller set to work with.
         (orm.ActionCounterUnique.objects
-            .filter(user=None, modified__lt=datetime.datetime(2011, 8, 1))
+            .filter(user=None, modified__lt=timezone.datetime(2011, 8, 1))
             .delete())
 
         # Update all remaining counters with a unique hash.
@@ -82,7 +82,7 @@ class Migration(DataMigration):
         },
         'auth.user': {
             'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'timezone.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -90,7 +90,7 @@ class Migration(DataMigration):
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'timezone.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),

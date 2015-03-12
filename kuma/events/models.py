@@ -3,6 +3,7 @@ import urllib2
 from datetime import datetime
 
 from django.db import models
+from django.utils import timezone
 
 from html5lib import sanitizer, HTMLParser
 
@@ -96,7 +97,7 @@ class Calendar(models.Model):
         header_line = events.pop(0)
         parse_header_line(header_line)
 
-        today = datetime.today()
+        today = timezone.datetime.today()
 
         for event_line in events:
             event = None

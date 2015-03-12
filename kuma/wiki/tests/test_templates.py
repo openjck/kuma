@@ -14,6 +14,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core import mail
+from django.utils import timezone
 from django.utils.http import urlquote
 from django.test.utils import override_settings
 
@@ -251,7 +252,7 @@ class RevisionTests(UserTestCase, WikiTestCase):
         """Load the revision view page and verify the title and content."""
         d = _create_document()
         r = d.current_revision
-        r.created = datetime(2011, 1, 1)
+        r.created = timezone.datetime(2011, 1, 1)
         r.save()
         url = reverse('wiki.revision', args=[d.slug, r.id])
         response = self.client.get(url)

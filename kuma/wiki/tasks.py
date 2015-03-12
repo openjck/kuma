@@ -11,6 +11,7 @@ from django.core.mail import EmailMessage, mail_admins, send_mail
 from django.db import connection, transaction
 from django.dispatch import receiver
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.encoding import smart_str
 
 from celery import task

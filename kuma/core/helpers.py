@@ -5,6 +5,7 @@ import urllib
 import urlparse
 
 from django.http import QueryDict
+from django.utils import timezone
 from django.utils.encoding import smart_str
 from django.utils.http import urlencode as urlencode_util
 from django.utils.tzinfo import LocalTimezone
@@ -159,9 +160,9 @@ def timesince(d, now=None):
                                 '%(number)d seconds ago', n))]
     if not now:
         if d.tzinfo:
-            now = datetime.datetime.now(LocalTimezone(d))
+            now = timezone.now(LocalTimezone(d))
         else:
-            now = datetime.datetime.now()
+            now = timezone.now()
 
     # Ignore microsecond part of 'd' since we removed it from 'now'
     delta = now - (d - datetime.timedelta(0, 0, d.microsecond))
