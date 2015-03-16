@@ -111,11 +111,9 @@
     <div class="one time message">
         {% if messages %}
         <ul>
-        	{% autoescape off %}
         	{% for msg in messages %}
-            <li>{{ _('msg') }}</li>
+            <li>{% if 'safe' in msg.tags %}{{ msg | safe }}{% else %}{{ msg }}{% endif %}</li>
         	{% endfor %}
-        	{% endautoescape %}
         </ul>
         {% endif %}
     </div>
@@ -176,11 +174,7 @@
   <main id="content"><div class="center clear">
   {% block content %}{% endblock %}
   </div></main>
-  <div class="display one time message">
-      {% if messages %}
-      {{ messages }}
-      {% endif %}
-  </div>
+  
 
   <!-- Footer -->
   <footer><div class="center">

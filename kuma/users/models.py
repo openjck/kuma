@@ -6,6 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
 from django.db import models
 from django.utils.functional import cached_property
+from django.utils.html import mark_safe
 
 from allauth.account.signals import user_signed_up, email_confirmed
 from allauth.socialaccount.signals import social_account_removed
@@ -199,7 +200,8 @@ def create_user_profile(sender, instance, created, **kwargs):
 def on_user_signed_up(sender, request, user, **kwargs):
     context={'request':request}
     msg='You have completed the first step of <a href="%s">Getting started with MDN</a>' % wiki_url(context, 'MDN/Getting_started')
-    messages.success(request, msg)
+    msg=mark_safe(msg)
+    messages.success(request, msg, extra_tags='safe')
     if switch_is_active('welcome_email'):
         # only send if the user has already verified at least one email address
         if user.emailaddress_set.filter(verified=True).exists():
