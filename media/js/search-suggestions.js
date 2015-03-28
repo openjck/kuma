@@ -23,7 +23,7 @@
             var $searchForm = $form.find('.search-form');
 
             var $search = $('<div></div>')
-              .addClass('search-wrapper')
+              .addClass('home-search-form')
               .appendTo($searchForm);
 
             var $filtersRight = $('<div></div>')
@@ -52,7 +52,7 @@
             var $searchInput = $('.search-input')
               .attr('autocomplete', 'off')
               .attr('size', '45')
-              .attr('id','search-q-s')
+              .attr('id','home-q')
               .appendTo($search);
 
             $searchForm.find('button').appendTo($search);

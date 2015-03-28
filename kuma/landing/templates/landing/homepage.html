@@ -193,6 +193,9 @@
 
         // Manually activate the Optimizely experiment and bucket the visitor
         // into the tested variation for reporting.
+        //
+        // This can be removed once the search suggestions A/B test has been
+        // completed.
         mdn.optimizely.push(['activate', 2709130652]);
         mdn.optimizely.push(['bucketVisitor', 2709130652, 2704500354]);
     </script>
@@ -200,6 +203,9 @@
     <script>
         // Manually activate the Optimizely experiment and bucket the visitor
         // into the baseline variation for reporting.
+        //
+        // This can be removed once the search suggestions A/B test has been
+        // completed.
         mdn.optimizely.push(['activate', 2709130652]);
         mdn.optimizely.push(['bucketVisitor', 2709130652, 2703510372]);
     </script>

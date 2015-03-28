@@ -2,49 +2,12 @@
 @require 'includes/mixins';
 
 .search-form {
-  padding: ($grid-spacing * 2) 0;
-
-  .search-wrapper {
-    big-search();
-    color: #fff;
-    cursor: text;
-    min-height: 28px;
-    padding: 6px;
-    position: relative;
-
-    .show-topics {
+  .home-search-form .show-topics {
       background-color: rgba-fallback(rgba(255, 255, 255, 0)) !important;
       box-shadow: none;
       color: #fff !important;
       font-size: 1.2em !important;
-      position: absolute;
-      right: 0px;
-    }
-
-    input#search-q-s {
-      background: transparent;
-      border: none;
-      color: #fff;
-      display: inline;
-      outline: none; /* csslint - cursor provides hint, this needs js to highlight the parent when #search-q-s has focus */
-      padding: 0 8px 2px;
-      vertical-align: middle;
-      &::-webkit-input-placeholder { /* WebKit browsers */
-          color: #DDD;
-      }
-      &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-          color: #DDD;
-          opacity: 1;
-      }
-      &::-moz-placeholder { /* Mozilla Firefox 19+ */
-          color: #DDD;
-          opacity: 1;
-      }
-      &:-ms-input-placeholder { /* Internet Explorer 10+ */
-          color: #DDD;
-      }
-    }
-  } /* end .search-wrapper */
+  }
 
   .notificaton-first-time {
     big-search();
@@ -151,10 +114,10 @@
   } /* end .filters */
 
   &.dark {
-    .search-wrapper, .suggestions {
+    .home-search-form, .suggestions {
       background-color: #fff;
     }
-    .search-wrapper, .search-wrapper input#search-q-s, .search-wrapper .show-topics, .suggestions, .suggestions li a {
+    .home-search-form, .home-search-form input#home-q, .home-search-form .show-topics, .suggestions, .suggestions li a {
       color: #4d4e53 !important;
     }
   }
