@@ -355,3 +355,12 @@ def wiki_url(context, path):
     # finally cache the reversed document URL for a bit
     memcache.set(u'wiki_url:%s:%s' % (locale, path), url, 60 * 5)
     return url
+
+
+@register.function
+def addbreaks(title):
+    """
+    adds <wbr> tags before . that appear between letters
+    no numbers should be split
+    """
+    return re.sub(r"(?<=[a-z,A-Z])\.(?=[a-z,A-Z])", "<wbr>.", title)
