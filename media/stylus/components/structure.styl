@@ -54,6 +54,16 @@ draw-grid();
 
 #tabzilla {
     bidi-value(float, right, left);
+    display: block;
+    height: 44px;
+    width: 150px;
+    overflow: hidden;
+}
+
+#tabzilla-panel {
+    /* in case the javascript loads before the CSS */
+    height: 0px;
+    overflow: hidden;
 }
 
 #nav-access {
