@@ -17,7 +17,7 @@ class dev_hacks {
 
     file {
         [ "/home/vagrant/logs",
-            "/home/vagrant/uploads",
+            "/home/vagrant/src/uploads",
             "/home/vagrant/product_details_json",
             "/home/vagrant/mdc_pages" ]:
         ensure => directory,

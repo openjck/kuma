@@ -127,10 +127,6 @@ class rabbitmq_config {
 
 class kuma_config {
     file {
-        "/home/vagrant/src/media/uploads":
-            target => "/home/vagrant/uploads",
-            ensure => link,
-            require => [ File["/home/vagrant/uploads"] ];
         "/home/vagrant/src/webroot/.htaccess":
             ensure => link,
             target => "/home/vagrant/src/configs/htaccess";

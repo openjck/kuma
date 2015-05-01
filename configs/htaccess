@@ -75,13 +75,13 @@ RewriteRule ^diagrams(.*) data/www/diagrams$1 [L]
 RewriteRule ^web-tech(.*) data/www/web-tech$1 [L]
 RewriteRule ^css(.*) data/www/css$1 [L]
 
-# Disable robots on dev and stage servers
+# Disable robots on the stage server
 RewriteCond %{HTTP_HOST} allizom
-RewriteRule ^robots.txt$ media/robots-go-away.txt [L]
+RewriteRule ^robots.txt$ /static/robots/robots-go-away.txt [L]
 
 # Rewrites to robots & sitemaps
-RewriteRule ^robots.txt$ media/robots.txt [L]
-RewriteRule ^sitemap.xml$ media/sitemap.xml [L]
+RewriteRule ^robots.txt$ /static/robots/robots.txt [L]
+RewriteRule ^sitemap.xml$ uploads/sitemap.xml [L]
 RewriteRule ^sitemaps/([\w\-]*)/sitemap.xml$ media/sitemaps/$1/sitemap.xml [L]
 
 # Bug 887428 - Misprinted URL in promo materials

@@ -16,9 +16,6 @@ build.py
 **-min.css
 **-all.js
 **-min.js
-media/uploads
-media/attachments
-media/sitemap*
 static/
 locale
 xfers/*
@@ -36,6 +33,6 @@ wheelhouse
 .awsconfig
 james.ini
 celeryev.pid
-media/js/libs/ckeditor/source/ckbuilder
+kuma/static/js/libs/ckeditor/source/ckbuilder
 .tox
-styles/*.css
+kuma/static/styles/*.css

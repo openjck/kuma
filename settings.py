@@ -321,17 +321,17 @@ LOCALE_PATHS = (
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = path('media')
-
-# Absolute path to the directory for the humans.txt file.
-HUMANSTXT_ROOT = MEDIA_ROOT
+MEDIA_ROOT = path('uploads')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/media/'
+MEDIA_URL = '/uploads/'
 STATIC_URL = '/static/'
 STATIC_ROOT = path('static')
+
+# Absolute path to the directory for the humans.txt file.
+HUMANSTXT_ROOT = STATIC_ROOT
 
 SERVE_MEDIA = False
 
@@ -457,8 +457,7 @@ STATICFILES_FINDERS = (
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 STATICFILES_DIRS = (
-    path('media'),
-    path('styles'),
+    path('kuma', 'static'),
 )
 
 # TODO: Figure out why changing the order of apps (for example, moving taggit
@@ -613,37 +612,37 @@ PIPELINE_COMPILERS = (
 PIPELINE_CSS = {
     'mdn': {
         'source_filenames': (
-            'font-awesome.styl',
-            'main.styl',
-            'badges.styl',
+            'assets/styles/font-awesome.styl',
+            'assets/styles/main.styl',
+            'assets/styles/badges.styl',
         ),
         'output_filename': 'css/mdn.css',
     },
     'jquery-ui': {
         'source_filenames': (
-            'libs/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.min.css',
-            'libs/jqueryui/moz-jquery-plugins.css',
-            'jquery-ui-customizations.css',
+            'assets/js/libs/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.min.css',
+            'assets/js/libs/jqueryui/moz-jquery-plugins.css',
+            'assets/styles/jquery-ui-customizations.css',
         ),
         'output_filename': 'css/jquery-ui.css',
     },
     'demostudio': {
         'source_filenames': (
-            'demos.styl',
+            'assets/styles/demos.styl',
         ),
         'output_filename': 'css/demostudio.css',
     },
     'devderby': {
         'source_filenames': (
-            'devderby.styl',
+            'assets/styles/devderby.styl',
         ),
         'output_filename': 'css/devderby.css',
     },
     'home': {
         'source_filenames': (
-            'home.styl',
-            'libs/owl.carousel/owl-carousel/owl.carousel.css',
-            'libs/owl.carousel/owl-carousel/owl.theme.css',
+            'assets/styles/home.styl',
+            'assets/js/libs/owl.carousel/owl-carousel/owl.carousel.css',
+            'assets/js/libs/owl.carousel/owl-carousel/owl.theme.css',
         ),
         'output_filename': 'css/home.css',
         'extra_context': {
@@ -653,137 +652,137 @@ PIPELINE_CSS = {
     },
     'search': {
         'source_filenames': (
-            'search.styl',
+            'assets/styles/search.styl',
         ),
         'output_filename': 'css/search.css',
     },
     'search-suggestions': {
         'source_filenames': (
-            'search-suggestions.styl',
+            'assets/styles/search-suggestions.styl',
         ),
         'output_filename': 'css/search-suggestions.css',
     },
     'wiki': {
         'source_filenames': (
-            'wiki.styl',
-            'zones.styl',
-            'diff.styl',
+            'assets/styles/wiki.styl',
+            'assets/styles/zones.styl',
+            'assets/styles/diff.styl',
+            'assets/styles/wiki-syntax.styl',
 
-            'libs/prism/themes/prism.css',
-            'libs/prism/plugins/line-highlight/prism-line-highlight.css',
-            'libs/prism/plugins/ie8/prism-ie8.css',
-            'prism-mdn/plugins/line-numbering/prism-line-numbering.css',
-            'prism-mdn/components/prism-json.css',
-            'wiki-syntax.styl',
+            'assets/js/libs/prism/themes/prism.css',
+            'assets/js/libs/prism/plugins/line-highlight/prism-line-highlight.css',
+            'assets/js/libs/prism/plugins/ie8/prism-ie8.css',
+            'assets/js/prism-mdn/plugins/line-numbering/prism-line-numbering.css',
+            'assets/js/prism-mdn/components/prism-json.css',
         ),
         'output_filename': 'css/wiki.css',
     },
     'wiki-revisions': {
         'source_filenames': (
-            'wiki-revisions.styl',
+            'assets/styles/wiki-revisions.styl',
         ),
         'output_filename': 'css/wiki-revisions.css',
     },
     'wiki-edit': {
         'source_filenames': (
-            'wiki-edit.styl',
+            'assets/styles/wiki-edit.styl',
         ),
         'output_filename': 'css/wiki-edit.css',
     },
     'sphinx': {
         'source_filenames': (
-            'wiki.styl',
-            'sphinx.styl',
+            'assets/styles/wiki.styl',
+            'assets/styles/sphinx.styl',
         ),
         'output_filename': 'css/sphinx.css',
     },
     'users': {
         'source_filenames': (
-            'users.styl',
+            'assets/styles/users.styl',
         ),
         'output_filename': 'css/users.css',
     },
     'tagit': {
         'source_filenames': (
-            'libs/jquery.tagit.css',
+            'assets/js/libs/jquery.tagit.css',
         ),
         'output_filename': 'css/tagit.css',
     },
     'promote': {
         'source_filenames': (
-            'promote.styl',
+            'assets/styles/promote.styl',
         ),
         'output_filename': 'css/promote.css',
     },
     'error': {
         'source_filenames': (
-            'error.styl',
+            'assets/styles/error.styl',
         ),
         'output_filename': 'css/error.css',
     },
     'error-404': {
         'source_filenames': (
-            'error.styl',
-            'error-404.styl',
+            'assets/styles/error.styl',
+            'assets/styles/error-404.styl',
         ),
         'output_filename': 'css/error-404.css',
     },
     'calendar': {
         'source_filenames': (
-            'calendar.styl',
+            'assets/styles/calendar.styl',
         ),
         'output_filename': 'css/calendar.css',
     },
     'profile': {
         'source_filenames': (
-            'profile.styl',
+            'assets/styles/profile.styl',
         ),
         'output_filename': 'css/profile.css',
     },
     'dashboards': {
         'source_filenames': (
-            'dashboards.styl',
-            'diff.styl',
+            'assets/styles/dashboards.styl',
+            'assets/styles/diff.styl',
         ),
         'output_filename': 'css/dashboards.css',
     },
     'newsletter': {
         'source_filenames': (
-            'newsletter.styl',
+            'assets/styles/newsletter.styl',
         ),
         'output_filename': 'css/newsletter.css',
     },
     'submission': {
         'source_filenames': (
-            'submission.styl',
+            'assets/styles/submission.styl',
         ),
         'output_filename': 'css/submission.css',
     },
     'user-banned': {
         'source_filenames': (
-            'user-banned.styl',
+            'assets/styles/user-banned.styl',
         ),
         'output_filename': 'css/user-banned.css',
     },
     'error-403-alternate': {
         'source_filenames': (
-            'error-403-alternate.styl',
+            'assets/styles/error-403-alternate.styl',
         ),
         'output_filename': 'css/error-403-alternate.css',
     },
     'fellowship': {
         'source_filenames': (
-            'fellowship.styl',
+            'assets/styles/fellowship.styl',
         ),
         'output_filename': 'css/fellowship.css',
     },
     'ckeditor-content': {
         'source_filenames': (
-            'main.styl',
-            'wiki.styl',
-            'wiki-wysiwyg.styl',
-            'wiki-syntax.styl',
-            'libs/font-awesome/css/font-awesome.min.css',
+            'assets/styles/main.styl',
+            'assets/styles/wiki.styl',
+            'assets/styles/wiki-wysiwyg.styl',
+            'assets/styles/wiki-syntax.styl',
+            'assets/styles/libs/font-awesome/css/font-awesome.min.css',
         ),
         'output_filename': 'css/ckeditor-content.css',
         'template_name': 'pipeline/javascript-array.jinja',
@@ -792,120 +791,120 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'main': {
         'source_filenames': (
-            'libs/jquery-2.1.0.js',
-            'components.js',
-            'analytics.js',
-            'main.js',
-            'auth.js',
-            'badges.js',
-            'social.js',
+            'assets/js/libs/jquery-2.1.0.js',
+            'assets/js/components.js',
+            'assets/js/analytics.js',
+            'assets/js/main.js',
+            'assets/js/auth.js',
+            'assets/js/badges.js',
+            'assets/js/social.js',
         ),
         'output_filename': 'js/main.js',
     },
     'home': {
         'source_filenames': (
-            'libs/owl.carousel/owl-carousel/owl.carousel.js',
-            'home.js'
+            'assets/js/libs/owl.carousel/owl-carousel/owl.carousel.js',
+            'assets/js/home.js'
         ),
         'output_filename': 'js/home.js',
     },
     'popup': {
         'source_filenames': (
-            'libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js',
-            'modal-control.js',
+            'assets/js/libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js',
+            'assets/js/modal-control.js',
         ),
         'output_filename': 'js/popup.js',
     },
     'profile': {
         'source_filenames': (
-            'profile.js',
-            'moz-jquery-plugins.js',
+            'assets/js/profile.js',
+            'assets/js/moz-jquery-plugins.js',
         ),
         'output_filename': 'js/profile.js',
     },
     'events': {
         'source_filenames': (
-            'libs/jquery.gmap-1.1.0.js',
-            'calendar.js',
+            'assets/js/libs/jquery.gmap-1.1.0.js',
+            'assets/js/calendar.js',
         ),
         'output_filename': 'js/events.js',
     },
     'demostudio': {
         'source_filenames': (
-            'libs/jquery.hoverIntent.minified.js',
-            'libs/jquery.scrollTo-1.4.2-min.js',
-            'demos.js',
-            'libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js',
-            'modal-control.js',
+            'assets/js/libs/jquery.hoverIntent.minified.js',
+            'assets/js/libs/jquery.scrollTo-1.4.2-min.js',
+            'assets/js/demos.js',
+            'assets/js/libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js',
+            'assets/js/modal-control.js',
         ),
         'output_filename': 'js/demostudio.js',
     },
     'demostudio_devderby_landing': {
         'source_filenames': (
-            'demos-devderby-landing.js',
+            'assets/js/demos-devderby-landing.js',
         ),
         'output_filename': 'js/demostudio_devderby_landing.js',
     },
     'jquery-ui': {
         'source_filenames': (
-            'libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js',
-            'moz-jquery-plugins.js',
+            'assets/js/libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js',
+            'assets/js/moz-jquery-plugins.js',
         ),
         'output_filename': 'js/jquery-ui.js',
     },
     'libs/tagit': {
         'source_filenames': (
-            'libs/tag-it.js',
+            'assets/js/libs/tag-it.js',
         ),
         'output_filename': 'js/libs/tagit.js',
     },
     'search': {
         'source_filenames': (
-            'search.js',
-            'search-navigator.js',
+            'assets/js/search.js',
+            'assets/js/search-navigator.js',
         ),
         'output_filename': 'js/search.js',
     },
     'framebuster': {
         'source_filenames': (
-            'framebuster.js',
+            'assets/js/framebuster.js',
         ),
         'output_filename': 'js/framebuster.js',
     },
     'syntax-prism': {
         'source_filenames': (
-            'libs/prism/prism.js',
-            'prism-mdn/components/prism-json.js',
-            'prism-mdn/plugins/line-numbering/prism-line-numbering.js',
-            'libs/prism/plugins/line-highlight/prism-line-highlight.js',
-            'syntax-prism.js',
+            'assets/js/libs/prism/prism.js',
+            'assets/js/prism-mdn/components/prism-json.js',
+            'assets/js/prism-mdn/plugins/line-numbering/prism-line-numbering.js',
+            'assets/js/libs/prism/plugins/line-highlight/prism-line-highlight.js',
+            'assets/js/syntax-prism.js',
         ),
         'output_filename': 'js/syntax-prism.js',
     },
     'search-suggestions': {
         'source_filenames': (
-            'search-suggestions.js',
+            'assets/js/search-suggestions.js',
         ),
         'output_filename': 'js/search-suggestions.js',
     },
     'wiki': {
         'source_filenames': (
-            'search-navigator.js',
-            'wiki.js',
+            'assets/js/search-navigator.js',
+            'assets/js/wiki.js',
         ),
         'output_filename': 'js/wiki.js',
     },
     'wiki-edit': {
         'source_filenames': (
-            'wiki-edit.js',
-            'libs/tag-it.js',
-            'wiki-tags-edit.js',
+            'assets/js/wiki-edit.js',
+            'assets/js/libs/tag-it.js',
+            'assets/js/wiki-tags-edit.js',
         ),
         'output_filename': 'js/wiki-edit.js',
     },
     'wiki-move': {
         'source_filenames': (
-            'wiki-move.js',
+            'assets/js/wiki-move.js',
         ),
         'output_filename': 'js/wiki-move.js',
         'extra_context': {
@@ -914,13 +913,13 @@ PIPELINE_JS = {
     },
     'newsletter': {
         'source_filenames': (
-            'newsletter.js',
+            'assets/js/newsletter.js',
         ),
         'output_filename': 'js/newsletter.js',
     },
     'fellowship': {
         'source_filenames': (
-            'fellowship.js',
+            'assets/js/fellowship.js',
         ),
         'output_filename': 'js/fellowship.js',
     },
@@ -1031,9 +1030,9 @@ GOOGLE_MAPS_API_KEY = "ABQIAAAAijZqBZcz-rowoXZC1tt9iRT5rHVQFKUGOHoyfP_4KyrflbHKc
 
 # demo studio uploads
 # Filesystem path where files uploaded for demos will be written
-DEMO_UPLOADS_ROOT = path('media/uploads/demos')
+DEMO_UPLOADS_ROOT = path(MEDIA_ROOT, 'demos')
 # Base URL from where files uploaded for demos will be linked and served
-DEMO_UPLOADS_URL = '/media/uploads/demos/'
+DEMO_UPLOADS_URL = MEDIA_URL + 'demos/'
 
 # Make sure South stays out of the way during testing
 SOUTH_TESTS_MIGRATE = False
