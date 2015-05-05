@@ -645,10 +645,6 @@ PIPELINE_CSS = {
             'assets/js/libs/owl.carousel/owl-carousel/owl.carousel.css',
             'assets/js/libs/owl.carousel/owl-carousel/owl.theme.css',
         ),
-        'extra_context': {
-            # Bug 1139947
-            'async': not TEMPLATE_DEBUG,
-        },
         'output_filename': 'css/home.css',
     },
     'search': {
@@ -807,6 +803,9 @@ PIPELINE_JS = {
             'assets/js/libs/owl.carousel/owl-carousel/owl.carousel.js',
             'assets/js/home.js'
         ),
+        'extra_context': {
+            'async': True,
+        },
         'output_filename': 'js/home.js',
     },
     'popup': {
