@@ -142,3 +142,9 @@
 [submodule "vendor/src/django-ratelimit"]
 	path = vendor/src/django-ratelimit
 	url = git://github.com/jsocol/django-ratelimit.git
+[submodule "vendor/src/django-pipeline"]
+	path = vendor/src/django-pipeline
+	url = git://github.com/cyberdelia/django-pipeline.git
+[submodule "vendor/src/futures"]
+	path = vendor/src/futures
+	url = git://github.com/agronholm/pythonfutures.git
