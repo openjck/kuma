@@ -110,6 +110,10 @@ django-ratelimit==0.5.0
 -e git://github.com/lmorchard/django-teamwork.git@b7dc818d39c92f733cb933814698cedfbbde3622#egg=django-teamwork
 # 2013-02-21
 -e git://github.com/simplejson/simplejson.git@062aa98fe19c9536b6ede4c0b84f5f3e6711b768#egg=simplejson
+# 2015-05-05
+-e git://github.com/cyberdelia/django-pipeline.git@47eaf9d6915446b99b7ba4b3c3bcf61c7b6d39be#egg=django-pipeline
+# 2015-05-05
+-e git://github.com/agronholm/pythonfutures.git@cb09ff1f52d2b5d62c1ed6363a60d728434b60f0#egg=futures
 
 ## Obsoleted / no longer needed
 
