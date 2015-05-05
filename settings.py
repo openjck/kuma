@@ -551,7 +551,8 @@ def JINJA_CONFIG():
     cache = get_cache('memcache')
     config = {'extensions': ['jinja2.ext.i18n', 'tower.template.i18n',
                              'jinja2.ext.with_', 'jinja2.ext.loopcontrols',
-                             'jinja2.ext.autoescape'],
+                             'jinja2.ext.autoescape',
+                             'pipeline.jinja2.ext.PipelineExtension'],
               'finalize': lambda x: x if x is not None else ''}
     if isinstance(cache, MemcachedCacheClass) and not settings.DEBUG:
         # We're passing the _cache object directly to jinja because
@@ -644,11 +645,11 @@ PIPELINE_CSS = {
             'assets/js/libs/owl.carousel/owl-carousel/owl.carousel.css',
             'assets/js/libs/owl.carousel/owl-carousel/owl.theme.css',
         ),
-        'output_filename': 'css/home.css',
         'extra_context': {
             # Bug 1139947
             'async': not TEMPLATE_DEBUG,
         },
+        'output_filename': 'css/home.css',
     },
     'search': {
         'source_filenames': (
@@ -906,6 +907,9 @@ PIPELINE_JS = {
         'source_filenames': (
             'assets/js/wiki-move.js',
         ),
+        'extra_context': {
+            'async': True,
+        },
         'output_filename': 'js/wiki-move.js',
     },
     'newsletter': {

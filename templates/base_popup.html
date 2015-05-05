@@ -14,7 +14,7 @@
   <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico"/>
 
   {% block site_css %}
-  {{ css('mdn') }}
+  {% compressed_css('mdn') %}
   {% endblock %}
 
     <!--[if IE]>
@@ -33,9 +33,9 @@
 
 {% block site_js %}
 
-  {{ js('main') }}
+  {% compressed_js('main') %}
 
-  {{ js('popup') }}
+  {% compressed_js('popup') %}
 
 {% endblock %}
 {% block js %}{% endblock %}

@@ -16,10 +16,10 @@
   <link rel="copyright" href="#copyright">
 
   {% block site_css %}
-    {{ css('mdn', 'all') }}
+    {% compressed_css('mdn') %}
 
     {% for style in styles %}
-      {{ css(style) }}
+      {% compressed_css(style) %}
     {% endfor %}
   {% endblock %}
 
@@ -193,7 +193,7 @@
     <!--[if lte IE 8]><script src="/media/js/libs/selectivizr-1.0.2/selectivizr-build.js"></script><![endif]-->
 
     {{ providers_media_js() }}
-    {{ js('main') }}
+    {% compressed_js('main') %}
 
     {% if waffle.flag('ga_outbound_links') %}
       <script>
@@ -202,7 +202,7 @@
     {% endif %}
 
     {% for script in scripts %}
-      {{ js(script) }}
+      {% compressed_js(script) %}
     {% endfor %}
   {% endblock %}
 
