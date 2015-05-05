@@ -34,3 +34,6 @@ james.ini
 celeryev.pid
 assets/js/libs/ckeditor/source/ckbuilder
 .tox
+
+# CSS compiled in-place by django-pipeline
+kuma/static/assets/styles/*.css
