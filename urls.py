@@ -71,12 +71,19 @@ if settings.DEBUG:
     urlpatterns += staticfiles_urlpatterns()
 
 if settings.SERVE_MEDIA:
+    # /media
     media_url = settings.MEDIA_URL.lstrip('/').rstrip('/')
     urlpatterns += patterns('',
         (r'^%s/(?P<path>.*)$' % media_url, 'django.views.static.serve',
           {'document_root': settings.MEDIA_ROOT}),
     )
 
+    # /static
+    static_url = settings.STATIC_URL.lstrip('/').rstrip('/')
+    urlpatterns += patterns('',
+        (r'^%s/(?P<path>.*)$' % static_url, 'django.views.static.serve',
+          {'document_root': settings.STATIC_ROOT}),
+    )
 # Legacy MindTouch redirects. These go last so that they don't mess
 # with local instances' ability to serve media.
 urlpatterns += patterns('',
