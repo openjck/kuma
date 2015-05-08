@@ -1409,7 +1409,7 @@ SOCIALACCOUNT_PROVIDERS = {
         'AUDIENCE': 'https://developer.mozilla.org',
         'REQUEST_PARAMETERS': {
             'siteName': 'Mozilla Developer Network',
-            'siteLogo': '/media/img/opengraph-logo.png',
+            'siteLogo': STATIC_URL + 'assets/img/opengraph-logo.png',
         }
     }
 }

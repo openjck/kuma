@@ -12,7 +12,7 @@ $(document).ready(function() {
         markers.push({
             address: $self.children('td.location').text(),
             icon: {
-                image: '/media/img/icn-tool-mozilla.png',
+                image: '/static/assets/img/icn-tool-mozilla.png',
                 iconsize: [32, 26],
                 iconanchor: [16, 13],
                 infowindowanchor: [24, 0]
