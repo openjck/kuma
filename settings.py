@@ -377,6 +377,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'django.core.context_processors.request',
     'django.core.context_processors.csrf',
+    'django.core.context_processors.static',
     'django.contrib.messages.context_processors.messages',
 
     'allauth.account.context_processors.account',
@@ -623,7 +624,7 @@ PIPELINE_CSS = {
         'source_filenames': (
             'assets/js/libs/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.min.css',
             'assets/styles/jqueryui/moz-jquery-plugins.css',
-            'assets/styles/jquery-ui-customizations.css',
+            'assets/styles/jquery-ui-customizations.styl',
         ),
         'output_filename': 'css/jquery-ui.css',
     },
@@ -632,6 +633,13 @@ PIPELINE_CSS = {
             'assets/styles/demos.styl',
         ),
         'output_filename': 'css/demostudio.css',
+    },
+    'demowrap': {
+        'source_filenames': (
+            'assets/styles/demowrap.styl',
+            'assets/styles/demos_wrap.styl',
+        ),
+        'output_filename': 'css/demowrap.css',
     },
     'devderby': {
         'source_filenames': (
@@ -775,11 +783,11 @@ PIPELINE_CSS = {
     },
     'ckeditor-content': {
         'source_filenames': (
-            'styles/main.styl',
-            'styles/wiki.styl',
-            'styles/wiki-wysiwyg.styl',
-            'styles/wiki-syntax.styl',
-            'styles/libs/font-awesome/css/font-awesome.min.css',
+            'assets/styles/main.styl',
+            'assets/styles/wiki.styl',
+            'assets/styles/wiki-wysiwyg.styl',
+            'assets/styles/wiki-syntax.styl',
+            'assets/styles/libs/font-awesome/css/font-awesome.min.css',
         ),
         'output_filename': 'css/ckeditor-content.css',
         'template_name': 'pipeline/javascript-array.jinja',
@@ -789,9 +797,9 @@ PIPELINE_JS = {
     'main': {
         'source_filenames': (
             'assets/js/libs/jquery-2.1.0.js',
+            'assets/js/main.js',
             'assets/js/components.js',
             'assets/js/analytics.js',
-            'assets/js/main.js',
             'assets/js/auth.js',
             'assets/js/badges.js',
             'assets/js/social.js',
