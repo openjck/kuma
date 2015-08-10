@@ -13,14 +13,9 @@ Kuma "Reset"
 We have a script that attempts to fix some of the most common problems with
 Kuma that are described below::
 
-  pushd .
-  # open https://www.youtube.com/watch?v=ckIMuvumYrg
-  cd /path/to/kuma
-  vagrant halt
-  find . -name "*.pyc" -exec rm -rf {} \; &&\
-  git submodule sync --recursive && git submodule update --init --recursive
-  vagrant up && vagrant provision
-  popd
+.. raw:: html
+
+   <hr width=50 size=10>
 
 .. _Running individual processes:
 
