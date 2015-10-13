@@ -769,18 +769,27 @@ PIPELINE_JS = {
             'js/moz-jquery-plugins.js',
         ),
         'output_filename': 'build/js/users.js',
+        'extra_context': {
+            'async': True,
+        },
     },
     'social': {
         'source_filenames': (
             'js/social.js',
         ),
         'output_filename': 'build/js/social.js',
+        'extra_context': {
+            'async': True,
+        },
     },
     'helpfulness': {
         'source_filenames': (
             'js/helpfulness.js',
         ),
         'output_filename': 'build/js/helpfulness.js',
+        'extra_context': {
+            'async': True,
+        },
     },
     'demostudio': {
         'source_filenames': (
@@ -791,6 +800,9 @@ PIPELINE_JS = {
             'js/modal-control.js',
         ),
         'output_filename': 'build/js/demostudio.js',
+        'extra_context': {
+            'async': True,
+        },
     },
     'demostudio_devderby_landing': {
         'source_filenames': (
@@ -811,6 +823,9 @@ PIPELINE_JS = {
             'js/search-navigator.js',
         ),
         'output_filename': 'build/js/search.js',
+        'extra_context': {
+            'async': True,
+        },
     },
     'framebuster': {
         'source_filenames': (
@@ -841,6 +856,9 @@ PIPELINE_JS = {
             'js/wiki-samples.js',
         ),
         'output_filename': 'build/js/wiki.js',
+        'extra_context': {
+            'async': True,
+        },
     },
     'wiki-edit': {
         'source_filenames': (
@@ -855,6 +873,9 @@ PIPELINE_JS = {
             'js/wiki-move.js',
         ),
         'output_filename': 'build/js/wiki-move.js',
+        'extra_context': {
+            'async': True,
+        },
     },
     'wiki-compat-tables': {
         'source_filenames': (
@@ -867,12 +888,18 @@ PIPELINE_JS = {
             'js/newsletter.js',
         ),
         'output_filename': 'build/js/newsletter.js',
+        'extra_context': {
+            'async': True,
+        },
     },
     'fellowship': {
         'source_filenames': (
             'js/fellowship.js',
         ),
         'output_filename': 'build/js/fellowship.js',
+        'extra_context': {
+            'async': True,
+        },
     },
 }
 

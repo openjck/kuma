@@ -110,5 +110,5 @@
 
 {% block js %}
   {% javascript 'jquery-ui' %}
-  {{ js('wiki-move', async=True) }}
+  {% javascript 'wiki-move' %}
 {% endblock %}

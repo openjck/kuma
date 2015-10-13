@@ -12,5 +12,5 @@
 
 {% block site_js %}
     {{ super() }}
-    {{ js('wiki', async=True) }}
+    {% javascript 'wiki' %}
 {% endblock %}

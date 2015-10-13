@@ -23,8 +23,8 @@
 {% block site_js %}
   {{ super() }}
   {% javascript 'demostudio' %}
-  {{ js('users', async=True) }}
-  {{ js('newsletter', async=True) }}
+  {% javascript 'users' %}
+  {% javascript 'newsletter' %}
 {% endblock %}
 
 {% block content %}
