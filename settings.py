@@ -651,6 +651,7 @@ PIPELINE_CSS = {
             'styles/wiki-compat-tables.styl',
         ),
         'output_filename': 'build/styles/wiki-compat-tables.css',
+        'template_name': 'pipeline/javascript-array-element.jinja',
     },
     'sphinx': {
         'source_filenames': (
@@ -846,6 +847,7 @@ PIPELINE_JS = {
             'js/syntax-prism.js',
         ),
         'output_filename': 'build/js/syntax-prism.js',
+        'template_name': 'pipeline/javascript-array-element.jinja',
     },
     'search-suggestions': {
         'source_filenames': (
@@ -886,6 +888,7 @@ PIPELINE_JS = {
             'js/wiki-compat-tables.js',
         ),
         'output_filename': 'build/js/wiki-compat-tables.js',
+        'template_name': 'pipeline/javascript-array-element.jinja',
     },
     'newsletter': {
         'source_filenames': (

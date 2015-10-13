@@ -5,7 +5,6 @@ from nose.tools import eq_
 from django.contrib.sites.models import Site
 from django.test import TestCase
 from django.test.utils import override_settings
-from jingo_minify.helpers import BUILD_ID_CSS, BUILD_ID_JS
 
 from kuma.core.cache import memcache
 from kuma.users.tests import UserTestCase
@@ -146,7 +145,7 @@ class UrlArrayTests(TestCase):
         bundle = 'wiki-compat-tables'
         result = css_url_array(bundle, False)
         expected = (
-            '["/static/css/%s-min.css?build=%s"]' % (bundle, BUILD_ID_CSS))
+            "['/static/css/%s-min.css?build=%s']" % (bundle, BUILD_ID_CSS))
         eq_(result, expected)
 
     @mock.patch('jingo_minify.helpers._get_mtime')
@@ -155,7 +154,7 @@ class UrlArrayTests(TestCase):
         bundle = 'wiki-compat-tables'
         result = css_url_array(bundle, True)
         mock_mtime.assert_called_once_with('css/%s.css' % bundle)
-        eq_(result, '["/static/css/%s.css?build=100"]' % bundle)
+        eq_(result, "['/static/css/%s.css?build=100']" % bundle)
 
     @override_settings(TEMPLATE_DEBUG=True)
     @mock.patch('jingo_minify.helpers._get_mtime')
@@ -164,13 +163,13 @@ class UrlArrayTests(TestCase):
         bundle = 'wiki-compat-tables'
         result = css_url_array(bundle)
         mock_mtime.assert_called_once_with('css/%s.css' % bundle)
-        eq_(result, '["/static/css/%s.css?build=200"]' % bundle)
+        eq_(result, "['/static/css/%s.css?build=200']" % bundle)
 
     def test_js_prod(self):
         bundle = 'syntax-prism'
         result = js_url_array(bundle, False)
         expected = (
-            '["/static/js/%s-min.js?build=%s"]' % (bundle, BUILD_ID_JS))
+            "['/static/js/%s-min.js?build=%s']" % (bundle, BUILD_ID_JS))
         eq_(result, expected)
 
     @mock.patch('jingo_minify.helpers._get_mtime')
@@ -179,11 +178,11 @@ class UrlArrayTests(TestCase):
         result = js_url_array('syntax-prism', True)
         eq_(mock_mtime.call_count, 5)
         expected = (
-            '["/static/js/libs/prism/prism.js?build=300",'
-            ' "/static/js/prism-mdn/components/prism-json.js?build=300",'
-            ' "/static/js/prism-mdn/plugins/line-numbering/'
-            'prism-line-numbering.js?build=300",'
-            ' "/static/js/libs/prism/plugins/line-highlight/'
-            'prism-line-highlight.js?build=300",'
-            ' "/static/js/syntax-prism.js?build=300"]')
+            "['/static/js/libs/prism/prism.js?build=300',"
+            " '/static/js/prism-mdn/components/prism-json.js?build=300',"
+            " '/static/js/prism-mdn/plugins/line-numbering/"
+            "prism-line-numbering.js?build=300',"
+            " '/static/js/libs/prism/plugins/line-highlight/"
+            "prism-line-highlight.js?build=300',"
+            " '/static/js/syntax-prism.js?build=300']")
         eq_(result, expected)
