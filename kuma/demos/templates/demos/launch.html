@@ -19,7 +19,7 @@
 
   <link rel="stylesheet" type="text/css" media="all" href="{{ static('css/demowrap.css') }}">
   <link rel="stylesheet" type="text/css" media="all" href="{{ static('css/demos_wrap.css') }}">
-  {{ css('jquery-ui') }}
+  {% stylesheet 'jquery-ui' %}
 
   <!--[if IE]>
   <meta http-equiv="imagetoolbar" content="no">
@@ -92,8 +92,8 @@
         {{ inlinei18n(request.locale) }}
     </script>
 
-    {{ js('main') }}
-    {{ js('popup') }}
+    {% javascript 'main' %}
+    {% javascript 'popup' %}
 
     <script type="text/javascript">
 

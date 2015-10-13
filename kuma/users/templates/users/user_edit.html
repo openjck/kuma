@@ -13,16 +13,16 @@
 
 {% block site_css %}
   {{ super() }}
-  {{ css('demostudio') }}
-  {{ css('jquery-ui') }}
-  {{ css('users') }}
-  {{ css('newsletter') }}
-  {{ css('submission') }}
+  {% stylesheet 'demostudio' %}
+  {% stylesheet 'jquery-ui' %}
+  {% stylesheet 'users' %}
+  {% stylesheet 'newsletter' %}
+  {% stylesheet 'submission' %}
 {% endblock %}
 
 {% block site_js %}
   {{ super() }}
-  {{ js('demostudio') }}
+  {% javascript 'demostudio' %}
   {{ js('users', async=True) }}
   {{ js('newsletter', async=True) }}
 {% endblock %}

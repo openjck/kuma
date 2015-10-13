@@ -17,7 +17,7 @@
   <link rel="copyright" href="#copyright">
 
   {% block site_css %}
-    {{ css('mdn', 'all') }}
+    {% stylesheet 'mdn', 'all' %}
 
     {% for style in styles %}
       {{ css(style) }}
@@ -227,7 +227,7 @@
     <!--[if lte IE 8]><script src="{{ static('js/libs/selectivizr-1.0.2/selectivizr-build.js') }}"></script><![endif]-->
 
     {{ providers_media_js() }}
-    {{ js('main') }}
+    {% javascript 'main' %}
 
       <script>
         if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
