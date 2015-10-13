@@ -745,6 +745,13 @@ PIPELINE_CSS = {
         'output_filename': 'build/styles/editor-content.css',
         'template_name': 'pipeline/javascript-array-element.jinja',
     },
+    'demowrap': {
+        'source_filenames': (
+            'styles/demowrap.styl',
+            'styles/demos_wrap.styl',
+        ),
+        'output_filename': 'build/styles/demowrap.css',
+    },
 }
 
 PIPELINE_JS = {

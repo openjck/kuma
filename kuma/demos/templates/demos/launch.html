@@ -17,8 +17,7 @@
 
   <meta name="description" content="{{ submission.summary }}" />
 
-  <link rel="stylesheet" type="text/css" media="all" href="{{ static('css/demowrap.css') }}">
-  <link rel="stylesheet" type="text/css" media="all" href="{{ static('css/demos_wrap.css') }}">
+  {% stylesheet 'demowrap' %}
   {% stylesheet 'jquery-ui' %}
 
   <!--[if IE]>
