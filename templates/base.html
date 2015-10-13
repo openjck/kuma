@@ -20,7 +20,7 @@
     {% stylesheet 'mdn', 'all' %}
 
     {% for style in styles %}
-      {{ css(style) }}
+      {% stylesheet style %}
     {% endfor %}
   {% endblock %}
 
@@ -234,7 +234,7 @@
       </script>
 
     {% for script in scripts %}
-      {{ js(script) }}
+      {% javascript script %}
     {% endfor %}
   {% endblock %}
 
