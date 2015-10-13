@@ -164,3 +164,6 @@
 [submodule "vendor/src/django-sundial"]
 	path = vendor/src/django-sundial
 	url = https://github.com/charettes/django-sundial
+[submodule "vendor/src/pipeline"]
+	path = vendor/src/pipeline
+	url = https://github.com/cyberdelia/django-pipeline.git
