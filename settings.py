@@ -733,6 +733,17 @@ PIPELINE_CSS = {
         ),
         'output_filename': 'build/styles/mdn10.css',
     },
+    'editor-content': {
+        'source_filenames': (
+            'styles/main.css',
+            'styles/wiki.css',
+            'styles/wiki-wysiwyg.css',
+            'styles/wiki-syntax.css',
+            'styles/libs/font-awesome/css/font-awesome.min.css',
+        ),
+        'output_filename': 'build/styles/editor-content.css',
+        'template_name': 'pipeline/javascript-array-element.jinja',
+    },
 }
 
 PIPELINE_JS = {

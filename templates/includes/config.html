@@ -31,16 +31,21 @@
             wiki: {
                 autosuggestTitleUrl: '{{ url('wiki.autosuggest_documents') }}'
             },
-            // Just-in-time asset paths
             assets: {
                 css: {
-                    'wiki-compat-tables': {{ css_url_array('wiki-compat-tables') }}
-                },
-                js: {
-                    'syntax-prism': {{ js_url_array('syntax-prism') }},
-                    'wiki-compat-tables': {{ js_url_array('wiki-compat-tables') }}
+                    'editor-content': [ {% stylesheet 'editor-content' %} ]
                 }
             }
+            // Just-in-time asset paths
+            // assets: {
+            //     css: {
+            //         'wiki-compat-tables': {{ css_url_array('wiki-compat-tables') }}
+            //     },
+            //     js: {
+            //         'syntax-prism': {{ js_url_array('syntax-prism') }},
+            //         'wiki-compat-tables': {{ js_url_array('wiki-compat-tables') }}
+            //     }
+            // }
         };
     })(this);
 </script>
