@@ -574,101 +574,177 @@ PIPELINE_COMPILERS = (
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.NoopCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
 
-MINIFY_BUNDLES = {
-    'css': {
-        'mdn': (
-            'css/font-awesome.css',
-            'css/main.css',
+PIPELINE_CSS = {
+    'mdn': {
+        'source_filenames': (
+            'styles/font-awesome.styl',
+            'styles/main.styl',
         ),
-        'jquery-ui': (
+        'output_filename': 'build/styles/mdn.css',
+    },
+    'jquery-ui': {
+        'source_filenames': (
             'js/libs/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.min.css',
-            'css/jqueryui/moz-jquery-plugins.css',
-            'css/jquery-ui-customizations.css',
+            'styles/libs/jqueryui/moz-jquery-plugins.css',
+            'styles/jquery-ui-customizations.styl',
         ),
-        'demostudio': (
-            'css/demos.css',
+        'output_filename': 'build/styles/jquery-ui.css',
+    },
+    'demostudio': {
+        'source_filenames': (
+            'styles/demos.styl',
         ),
-        'devderby': (
-            'css/devderby.css',
+        'output_filename': 'build/styles/demostudio.css',
+    },
+    'devderby': {
+        'source_filenames': (
+            'styles/devderby.styl',
         ),
-        'gaia': (
-            'css/gaia.css',
+        'output_filename': 'build/styles/devderby.css',
+    },
+    'gaia': {
+        'source_filenames': (
+            'styles/gaia.styl',
         ),
-        'home': (
-            'css/home.css',
+        'output_filename': 'build/styles/gaia.css',
+    },
+    'home': {
+        'source_filenames': (
+            'styles/home.styl',
         ),
-        'search': (
-            'css/search.css',
+        'output_filename': 'build/styles/home.css',
+    },
+    'search': {
+        'source_filenames': (
+            'styles/search.styl',
         ),
-        'search-suggestions': (
-            'css/search-suggestions.css',
+        'output_filename': 'build/styles/search.css',
+    },
+    'search-suggestions': {
+        'source_filenames': (
+            'styles/search-suggestions.styl',
         ),
-        'wiki': (
-            'css/wiki.css',
-            'css/zones.css',
-            'css/diff.css',
+        'output_filename': 'build/styles/search-suggestions.css',
+    },
+    'wiki': {
+        'source_filenames': (
+            'styles/wiki.styl',
+            'styles/zones.styl',
+            'styles/diff.styl',
 
             'js/libs/prism/themes/prism.css',
             'js/libs/prism/plugins/line-highlight/prism-line-highlight.css',
             'js/libs/prism/plugins/ie8/prism-ie8.css',
             'js/prism-mdn/plugins/line-numbering/prism-line-numbering.css',
             'js/prism-mdn/components/prism-json.css',
-            'css/wiki-syntax.css',
+            'styles/wiki-syntax.styl',
         ),
-        'wiki-revisions': (
-            'css/wiki-revisions.css',
-        ),
-        'wiki-edit': (
-            'css/wiki-edit.css',
-        ),
-        'wiki-compat-tables': (
-            'css/wiki-compat-tables.css',
-        ),
-        'sphinx': (
-            'css/wiki.css',
-            'css/sphinx.css',
-        ),
-        'users': (
-            'css/users.css',
-        ),
-        'tagit': (
-            'css/libs/jquery.tagit.css',
-        ),
-        'promote': (
-            'css/promote.css',
-        ),
-        'error': (
-            'css/error.css',
-        ),
-        'error-404': (
-            'css/error.css',
-            'css/error-404.css',
-        ),
-        'dashboards': (
-            'css/dashboards.css',
-            'css/diff.css',
-        ),
-        'newsletter': (
-            'css/newsletter.css',
-        ),
-        'submission': (
-            'css/submission.css',
-        ),
-        'user-banned': (
-            'css/user-banned.css',
-        ),
-        'error-403-alternate': (
-            'css/error-403-alternate.css',
-        ),
-        'fellowship': (
-            'css/fellowship.css',
-        ),
-        'mdn10': (
-            'css/mdn10.css',
-        ),
+        'output_filename': 'build/styles/wiki.css',
     },
-    'js': {
-        'main': (
+    'wiki-revisions': {
+        'source_filenames': (
+            'styles/wiki-revisions.styl',
+        ),
+        'output_filename': 'build/styles/wiki-revisions.css',
+    },
+    'wiki-edit': {
+        'source_filenames': (
+            'styles/wiki-edit.styl',
+        ),
+        'output_filename': 'build/styles/wiki-edit.css',
+    },
+    'wiki-compat-tables': {
+        'source_filenames': (
+            'styles/wiki-compat-tables.styl',
+        ),
+        'output_filename': 'build/styles/wiki-compat-tables.css',
+    },
+    'sphinx': {
+        'source_filenames': (
+            'styles/wiki.styl',
+            'styles/sphinx.styl',
+        ),
+        'output_filename': 'build/styles/sphinx.css',
+    },
+    'users': {
+        'source_filenames': (
+            'styles/users.styl',
+        ),
+        'output_filename': 'build/styles/users.css',
+    },
+    'tagit': {
+        'source_filenames': (
+            'styles/libs/jquery.tagit.css',
+        ),
+        'output_filename': 'build/styles/tagit.css',
+    },
+    'promote': {
+        'source_filenames': (
+            'styles/promote.styl',
+        ),
+        'output_filename': 'build/styles/promote.css',
+    },
+    'error': {
+        'source_filenames': (
+            'styles/error.styl',
+        ),
+        'output_filename': 'build/styles/error.css',
+    },
+    'error-404': {
+        'source_filenames': (
+            'styles/error.styl',
+            'styles/error-404.styl',
+        ),
+        'output_filename': 'build/styles/error-404.css',
+    },
+    'dashboards': {
+        'source_filenames': (
+            'styles/dashboards.styl',
+            'styles/diff.styl',
+        ),
+        'output_filename': 'build/styles/dashboards.css',
+    },
+    'newsletter': {
+        'source_filenames': (
+            'styles/newsletter.styl',
+        ),
+        'output_filename': 'build/styles/newsletter.css',
+    },
+    'submission': {
+        'source_filenames': (
+            'styles/submission.styl',
+        ),
+        'output_filename': 'build/styles/submission.css',
+    },
+    'user-banned': {
+        'source_filenames': (
+            'styles/user-banned.styl',
+        ),
+        'output_filename': 'build/styles/user-banned.css',
+    },
+    'error-403-alternate': {
+        'source_filenames': (
+            'styles/error-403-alternate.styl',
+        ),
+        'output_filename': 'build/styles/error-403-alternate.css',
+    },
+    'fellowship': {
+        'source_filenames': (
+            'styles/fellowship.styl',
+        ),
+        'output_filename': 'build/styles/fellowship.css',
+    },
+    'mdn10': {
+        'source_filenames': (
+            'styles/mdn10.styl',
+        ),
+        'output_filename': 'build/styles/mdn10.css',
+    },
+}
+
+PIPELINE_JS = {
+    'main': {
+        'source_filenames': (
             'js/libs/jquery-2.1.0.js',
             'js/components.js',
             'js/analytics.js',
@@ -677,74 +753,126 @@ MINIFY_BUNDLES = {
             'js/libs/fontfaceobserver/fontfaceobserver-standalone.js',
             'js/fonts.js',
         ),
-        'popup': (
+        'output_filename': 'build/js/main.js',
+    },
+    'popup': {
+        'source_filenames': (
             'js/libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js',
             'js/modal-control.js',
         ),
-        'users': (
+        'output_filename': 'build/js/popup.js',
+    },
+    'users': {
+        'source_filenames': (
             'js/libs/tag-it.js',
             'js/users.js',
             'js/moz-jquery-plugins.js',
         ),
-        'social': (
+        'output_filename': 'build/js/users.js',
+    },
+    'social': {
+        'source_filenames': (
             'js/social.js',
         ),
-        'helpfulness': (
+        'output_filename': 'build/js/social.js',
+    },
+    'helpfulness': {
+        'source_filenames': (
             'js/helpfulness.js',
         ),
-        'demostudio': (
+        'output_filename': 'build/js/helpfulness.js',
+    },
+    'demostudio': {
+        'source_filenames': (
             'js/libs/jquery.hoverIntent.minified.js',
             'js/libs/jquery.scrollTo-1.4.2-min.js',
             'js/demos.js',
             'js/libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js',
             'js/modal-control.js',
         ),
-        'demostudio_devderby_landing': (
+        'output_filename': 'build/js/demostudio.js',
+    },
+    'demostudio_devderby_landing': {
+        'source_filenames': (
             'js/demos-devderby-landing.js',
         ),
-        'jquery-ui': (
+        'output_filename': 'build/js/demostudio_devderby_landing.js',
+    },
+    'jquery-ui': {
+        'source_filenames': (
             'js/libs/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js',
             'js/moz-jquery-plugins.js',
         ),
-        'search': (
+        'output_filename': 'build/js/jquery-ui.js',
+    },
+    'search': {
+        'source_filenames': (
             'js/search.js',
             'js/search-navigator.js',
         ),
-        'framebuster': (
+        'output_filename': 'build/js/search.js',
+    },
+    'framebuster': {
+        'source_filenames': (
             'js/framebuster.js',
         ),
-        'syntax-prism': (
+        'output_filename': 'build/js/framebuster.js',
+    },
+    'syntax-prism': {
+        'source_filenames': (
             'js/libs/prism/prism.js',
             'js/prism-mdn/components/prism-json.js',
             'js/prism-mdn/plugins/line-numbering/prism-line-numbering.js',
             'js/libs/prism/plugins/line-highlight/prism-line-highlight.js',
             'js/syntax-prism.js',
         ),
-        'search-suggestions': (
+        'output_filename': 'build/js/syntax-prism.js',
+    },
+    'search-suggestions': {
+        'source_filenames': (
             'js/search-suggestions.js',
         ),
-        'wiki': (
+        'output_filename': 'build/js/search-suggestions.js',
+    },
+    'wiki': {
+        'source_filenames': (
             'js/search-navigator.js',
             'js/wiki.js',
             'js/wiki-samples.js',
         ),
-        'wiki-edit': (
+        'output_filename': 'build/js/wiki.js',
+    },
+    'wiki-edit': {
+        'source_filenames': (
             'js/wiki-edit.js',
             'js/libs/tag-it.js',
             'js/wiki-tags-edit.js',
         ),
-        'wiki-move': (
+        'output_filename': 'build/js/wiki-edit.js',
+    },
+    'wiki-move': {
+        'source_filenames': (
             'js/wiki-move.js',
         ),
-        'wiki-compat-tables': (
+        'output_filename': 'build/js/wiki-move.js',
+    },
+    'wiki-compat-tables': {
+        'source_filenames': (
             'js/wiki-compat-tables.js',
         ),
-        'newsletter': (
+        'output_filename': 'build/js/wiki-compat-tables.js',
+    },
+    'newsletter': {
+        'source_filenames': (
             'js/newsletter.js',
         ),
-        'fellowship': (
+        'output_filename': 'build/js/newsletter.js',
+    },
+    'fellowship': {
+        'source_filenames': (
             'js/fellowship.js',
         ),
+        'output_filename': 'build/js/fellowship.js',
     },
 }
 
