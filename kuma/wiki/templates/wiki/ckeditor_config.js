@@ -41,8 +41,6 @@
   CKEDITOR.dtd.$block['i'] = 1;
   delete CKEDITOR.dtd.$removeEmpty['i'];
 
-  CKEDITOR.timestamp = '{{ BUILD_ID_JS }}';
-
   CKEDITOR.editorConfig = function(config) {
     // Should be kept in sync with the list in ckeditor/source/build-config.js.
     // Defining plugins list explicitly lets us to switch easily between dev and build versions.

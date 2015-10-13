@@ -915,6 +915,20 @@ PIPELINE_JS = {
             'async': True,
         },
     },
+    'ckeditor-prod': {
+        'source_filenames': (
+            'js/libs/ckeditor/build/ckeditor/ckeditor.js',
+            'js/libs/ckeditor/build/ckeditor/adapters/jquery.js',
+        ),
+        'output_filename': 'build/js/ckeditor-prod.js',
+    },
+    'ckeditor-dev': {
+        'source_filenames': (
+            'js/libs/ckeditor/source/ckeditor/ckeditor.js',
+            'js/libs/ckeditor/source/ckeditor/adapters/jquery.js',
+        ),
+        'output_filename': 'build/js/ckeditor-dev.js',
+    },
 }
 
 #
