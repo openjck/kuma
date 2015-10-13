@@ -35,9 +35,6 @@ html5lib==0.999999
 
 jingo==0.7.1
 
-# FIXME: not released yet as of 2015-05-08
-jingo-minify==0.6.0
-
 kombu==3.0.26
 
 oauthlib==1.0.1
