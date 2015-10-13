@@ -14,7 +14,6 @@ from django.utils.html import conditional_escape
 
 from constance import config
 from jingo import register
-from jingo_minify.helpers import get_js_urls, get_css_urls
 
 from kuma.core.urlresolvers import reverse
 from .constants import DIFF_WRAP_COLUMN
@@ -240,7 +239,8 @@ def asset_url_array(asset_urls):
     Return a JS array of asset URLs.
     """
     url_array = '[' + ', '.join('"%s"' % url for url in asset_urls) + ']'
-    return jinja2.Markup(url_array)
+    return ''
+    # return jinja2.Markup(url_array)
 
 
 @register.function
@@ -267,7 +267,8 @@ def js_url_array(bundle, debug=None):
       "/static/js/fonts.js?build=1443476862"
     ]
     """
-    return asset_url_array(get_js_urls(bundle, debug))
+    return ''
+    # return asset_url_array(get_js_urls(bundle, debug))
 
 
 @register.function
@@ -286,4 +287,5 @@ def css_url_array(bundle, debug=None):
       "/static/css/main.css?build=1443563109"
     ]
     """
-    return asset_url_array(get_css_urls(bundle, debug))
+    return ''
+    # return asset_url_array(get_css_urls(bundle, debug))

@@ -356,7 +356,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'kuma.core.context_processors.i18n',
     'kuma.core.context_processors.next_url',
 
-    'jingo_minify.helpers.build_ids',
     'constance.context_processors.config',
 )
 
@@ -462,7 +461,6 @@ INSTALLED_APPS = (
     'kuma.actioncounters',
 
     # util
-    'jingo_minify',
     'pipeline',
     'product_details',
     'tower',
@@ -560,11 +558,6 @@ STATICI18N_DOMAIN = 'javascript'
 # If you have trouble extracting strings with Tower, try setting this
 # to True
 TOWER_ADD_HEADERS = True
-
-# Bundles for JS/CSS Minification
-JINGO_MINIFY_USE_STATIC = True
-CLEANCSS_BIN = '/usr/local/bin/cleancss'
-UGLIFY_BIN = '/usr/bin/uglifyjs'
 
 PIPELINE_COMPILERS = (
     'pipeline.compilers.stylus.StylusCompiler',
