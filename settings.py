@@ -929,6 +929,45 @@ PIPELINE_JS = {
         ),
         'output_filename': 'build/js/ckeditor-dev.js',
     },
+    'carousel': {
+        'source_filenames': (
+            'js/libs/carousel.js',
+        ),
+        'output_filename': 'build/js/carousel.js',
+    },
+    'html5': {
+        'source_filenames': (
+            'js/libs/html5.js',
+        ),
+        'output_filename': 'build/js/html5.js',
+    },
+    'selectivizr': {
+        'source_filenames': (
+            'js/libs/selectivizr-1.0.2/selectivizr-build.js',
+        ),
+        'output_filename': 'build/js/selectivizr.js',
+    },
+    'hoverIntent': {
+        'source_filenames': (
+            'js/libs/jquery.hoverIntent.minified.js',
+        ),
+        'output_filename': 'build/js/hoverIntent.js',
+    },
+    'modal-control': {
+        'source_filenames': (
+            'js/modal-control.js',
+        ),
+        'output_filename': 'build/js/modal-control.js',
+    },
+    'ace': {
+        'source_filenames': (
+            'js/libs/ace/ace.js',
+            'js/libs/ace/mode-javascript.js',
+            'js/libs/ace/theme-dreamweaver.js',
+            'js/libs/ace/worker-javascript.js',
+        ),
+        'output_filename': 'build/js/ace.js',
+    },
 }
 
 #

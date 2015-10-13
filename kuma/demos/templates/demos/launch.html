@@ -23,7 +23,7 @@
   <!--[if IE]>
   <meta http-equiv="imagetoolbar" content="no">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-  <script src="{{ static('js/libs/html5.js') }}"></script>
+  <script src="{% javascript 'html5' %}"></script>
   <![endif]-->
 
 </head>
@@ -187,8 +187,8 @@
   </script>
 
   <!-- provide "report" functionality -->
-  <script type="text/javascript" src="{{ static('js/libs/jquery.hoverIntent.minified.js') }}"></script>
-  <script type="text/javascript" src="{{ static('js/modal-control.js') }}"></script>
+  {% javascript 'hoverIntent' %}
+  {% javascript 'modal-control' %}
 
 </body>
 </html>
