@@ -418,7 +418,10 @@ TEMPLATE_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
+    'pipeline.finders.PipelineFinder',
 )
+
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 STATICFILES_DIRS = (
     path('kuma', 'static'),
@@ -460,6 +463,7 @@ INSTALLED_APPS = (
 
     # util
     'jingo_minify',
+    'pipeline',
     'product_details',
     'tower',
     'smuggler',
@@ -504,7 +508,8 @@ def JINJA_CONFIG():
     cache = caches['memcache']
     config = {'extensions': ['jinja2.ext.i18n', 'tower.template.i18n',
                              'jinja2.ext.with_', 'jinja2.ext.loopcontrols',
-                             'jinja2.ext.autoescape'],
+                             'jinja2.ext.autoescape',
+                             'pipeline.templatetags.ext.PipelineExtension'],
               'finalize': lambda x: x if x is not None else ''}
     if isinstance(cache, MemcachedCache) and not settings.DEBUG:
         # We're passing the _cache object directly to jinja because
@@ -560,6 +565,14 @@ TOWER_ADD_HEADERS = True
 JINGO_MINIFY_USE_STATIC = True
 CLEANCSS_BIN = '/usr/local/bin/cleancss'
 UGLIFY_BIN = '/usr/bin/uglifyjs'
+
+PIPELINE_COMPILERS = (
+    'pipeline.compilers.stylus.StylusCompiler',
+)
+
+# TODO: Use a real CSS compressor
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.NoopCompressor'
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
 
 MINIFY_BUNDLES = {
     'css': {
