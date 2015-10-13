@@ -101,11 +101,11 @@
     config.startupFocus = true;
     config.bodyClass = 'text-content redesign';
     config.contentsCss = [
-      mdn.staticPath + 'css/main.css?{{ BUILD_ID_JS }}',
-      mdn.staticPath + 'css/wiki.css?{{ BUILD_ID_JS }}',
-      mdn.staticPath + 'css/wiki-wysiwyg.css?{{ BUILD_ID_JS }}',
-      mdn.staticPath + 'css/wiki-syntax.css?{{ BUILD_ID_JS }}',
-      mdn.staticPath + 'css/libs/font-awesome/css/font-awesome.min.css?{{ BUILD_ID_JS }}'
+      mdn.staticPath + 'styles/main.css?{{ BUILD_ID_JS }}',
+      mdn.staticPath + 'styles/wiki.css?{{ BUILD_ID_JS }}',
+      mdn.staticPath + 'styles/wiki-wysiwyg.css?{{ BUILD_ID_JS }}',
+      mdn.staticPath + 'styles/wiki-syntax.css?{{ BUILD_ID_JS }}',
+      mdn.staticPath + 'styles/libs/font-awesome/css/font-awesome.min.css?{{ BUILD_ID_JS }}'
     ];
 
     if(window.waffle && window.waffle.flag_is_active('enable_customcss')) {
