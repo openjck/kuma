@@ -1,5 +1,5 @@
 # sha256: wl70c4sI_fswlCR8AS8_0bKZcqy9N_mIBwsqhfX77gA
-ansible==1.9.2
+ansible==2.9.20
 
 # sha256: X3mpXRNV7Rt-6SRB_Nl4lPeckhj062LvVDO7hA0BhG4
 codecov==1.6.3
